@@ -1,10 +1,8 @@
-﻿// Documnet Id : 1Cgp5thQ0-9BwhZmlmrKTOe-A1iGrorWZ-YDUHugMBhc
-// Sheet Id : 0
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public interface ILoader<Key, Value>
 {
