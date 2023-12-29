@@ -6,22 +6,23 @@ using UnityEngine.AI;
 public class Monster : MonoBehaviour
 {
     [SerializeField]
-    private Transform _target;
+    private Transform target;
 
-    private NavMeshAgent _agent;
+    private NavMeshAgent agent;
 
     // Start is called before the first frame update
     void Start()
     {
-        _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
-        _agent.updateRotation = false;
-        _agent.updateUpAxis = false;
-        _agent.radius = 0.2f;
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.radius = 0.2f;
+        agent.speed = 1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _agent.SetDestination(_target.position);
+        agent.SetDestination(target.position);
     }
 }

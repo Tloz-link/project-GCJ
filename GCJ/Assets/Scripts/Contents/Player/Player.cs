@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : UI_Base
 {
-    public float speed = 1f;         // 플레이어의 이동 속도
+    public float speed = 3f;         // 플레이어의 이동 속도
     private Vector2 inputDirection;  // 현재 입력 방향
 
     public override bool Init()
