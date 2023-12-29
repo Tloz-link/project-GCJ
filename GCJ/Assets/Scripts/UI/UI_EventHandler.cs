@@ -4,20 +4,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler
+public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public Action<PointerEventData> OnClickHandler = null;
-    public Action<PointerEventData> OnDragHandler = null;
+    public Action OnClickHandler = null;
+    public Action OnPressedHandler = null;
+    public Action OnPointerDownHandler = null;
+    public Action OnPointerUpHandler = null;
 
-	public void OnPointerClick(PointerEventData eventData)
-	{
-		if (OnClickHandler != null)
-			OnClickHandler.Invoke(eventData);
-	}
+    private bool isPressed = false;
 
-	public void OnDrag(PointerEventData eventData)
+    private void Update()
     {
-		if (OnDragHandler != null)
-            OnDragHandler.Invoke(eventData);
+        if (isPressed)
+        {
+            OnPressedHandler?.Invoke();
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+	{
+		OnClickHandler?.Invoke();
 	}
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        isPressed = true;
+        OnPointerDownHandler?.Invoke();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isPressed = false;
+        OnPointerUpHandler?.Invoke();
+    }
 }

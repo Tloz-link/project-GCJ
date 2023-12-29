@@ -39,7 +39,7 @@ public class Managers : MonoBehaviour
 
     }
 
-    static void Init(bool isPlaying = false)
+    static void Init()
     {
         if (s_instance == null)
         {
@@ -57,12 +57,22 @@ public class Managers : MonoBehaviour
             s_instance._pool.Init();
             s_instance._sound.Init();
         }
-
-        if (isPlaying == true && s_instance != null)
-        {
-            s_instance._game.Init();
-        }
 	}
+
+    public static void StartGame()
+    {
+        if (s_instance == null)
+        {
+            Init();
+        }
+
+        s_instance._game.Init();
+    }
+
+    public static void ClearGame()
+    {
+        Game.Clear();
+    }
 
     public static void Clear()
     {
@@ -70,6 +80,5 @@ public class Managers : MonoBehaviour
         Scene.Clear();
         UI.Clear();
         Pool.Clear();
-        Game.Clear();
     }
 }

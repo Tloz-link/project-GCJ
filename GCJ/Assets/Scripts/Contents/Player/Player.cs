@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Player : UI_Base
 {
-
+    public float speed = 1f;         // 플레이어의 이동 속도
+    private Vector2 inputDirection;  // 현재 입력 방향
 
     public override bool Init()
     {
@@ -14,9 +15,21 @@ public class Player : UI_Base
         return _init = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        MoveUpdate();
+    }
+
+    // 입력 방향을 설정한다.
+    public void SetInputDirection(Vector2 direction)
+    {
+        inputDirection = direction;
+    }
+
+    private void MoveUpdate()
+    {
+        transform.Translate(inputDirection * speed * Time.deltaTime);
+        float scaleX = (inputDirection.x < 0f) ? 1f : -1f;
+        transform.localScale = new Vector3(scaleX, 1f, 1f);
     }
 }
