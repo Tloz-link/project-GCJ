@@ -795,7 +795,7 @@ GameObject:
   - component: {fileID: 920460729}
   - component: {fileID: 920460728}
   m_Layer: 0
-  m_Name: Enviroment
+  m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 1082407871}
   - component: {fileID: 1082407870}
   m_Layer: 0
-  m_Name: Rock
+  m_Name: Env
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
