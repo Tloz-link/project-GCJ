@@ -5,24 +5,45 @@ using UnityEngine.AI;
 
 public class Monster : MonoBehaviour
 {
+    private int id;
+    private int hp;
+
     [SerializeField]
     private Transform target;
-
     private NavMeshAgent agent;
 
-    // Start is called before the first frame update
-    void Start()
+    public void SetInfo(int id, Transform target)
     {
         agent = gameObject.GetOrAddComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         agent.radius = 0.2f;
         agent.speed = 1f;
+
+        this.id = id;
+        this.hp = 3;
+        this.target = target;
     }
 
-    // Update is called once per frame
+    public bool IsAlive()
+    {
+        return hp > 0;
+    }
+
     void Update()
     {
-        agent.SetDestination(target.position);
+        if (target != null)
+        {
+            agent.SetDestination(target.position);
+        }
+    }
+
+    public void Damaged(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Managers.Monster.DestoryMonster(id);
+        }
     }
 }

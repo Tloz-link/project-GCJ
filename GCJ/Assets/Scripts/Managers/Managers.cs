@@ -9,8 +9,10 @@ public class Managers : MonoBehaviour
 
     #region Contents
     GameManagerEx _game = new GameManagerEx();
+    MonsterManager _monster = new MonsterManager();
 
     public static GameManagerEx Game { get { return Instance._game; } }
+    public static MonsterManager Monster { get {  return Instance._monster; } }
 	#endregion
 
 	#region Core
@@ -66,12 +68,14 @@ public class Managers : MonoBehaviour
             Init();
         }
 
-        s_instance._game.Init();
+        Game.Init();
+        Monster.Init();
     }
 
     public static void ClearGame()
     {
         Game.Clear();
+        Monster.Clear();
     }
 
     public static void Clear()

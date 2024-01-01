@@ -6,11 +6,13 @@ using UnityEngine;
 public class GameManagerEx
 {
     public Player Player { get; private set; }
+    public float Range { get; private set; }
 
     public void Init()
     {
         Managers.UI.ShowPopupUI<UI_Joystick>();
         Player = GameObject.Find("Player").GetComponent<Player>();
+        Range = 5f;
 
         Camera.main.gameObject.GetOrAddComponent<FollowCamera>();
     }

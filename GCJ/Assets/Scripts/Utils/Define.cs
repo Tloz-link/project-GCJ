@@ -28,4 +28,9 @@ public class Define
         PointerUp,
         PointerExit
     }
+
+    public enum Layer
+    {
+        Monster = 6
+    }
 }
