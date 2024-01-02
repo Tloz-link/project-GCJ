@@ -8,7 +8,8 @@ public class Player : UI_Base
 {
     enum GameObjects
     {
-        Sprite
+        Sprite,
+        Satellite
     }
 
     public float speed = 3f;         // 플레이어의 이동 속도
@@ -22,6 +23,8 @@ public class Player : UI_Base
             return false;
 
         BindObject(typeof(GameObjects));
+
+        CreateSatellites(3);
         return _init = true;
     }
 
@@ -29,7 +32,8 @@ public class Player : UI_Base
     {
         UpdateMove();
         UpdateTarget();
-        UpdateAttack();
+        UpdateAttack(); // 임시
+        RotateSatellites();
     }
 
     // 입력 방향을 설정한다.
@@ -60,6 +64,7 @@ public class Player : UI_Base
         target = Managers.Monster.FindClosestMonster(transform.position);
     }
 
+    // 임시
     private float tick = 0f;
     private void UpdateAttack()
     {
@@ -83,4 +88,53 @@ public class Player : UI_Base
             tick = 0f;
         }
     }
+
+    #region Satellite
+    private float orbitRadius = 1f;
+    private float rotationSpeed = 200f;
+    private List<GameObject> satellites = new List<GameObject>();
+
+    private void CreateSatellites(int count)
+    {
+        ClearSatellites();
+
+        for (int i = 0; i < count; ++i)
+        {
+            float angle = i * 360f / count;
+            Vector2 spawnPosition = GetCirclePosition(angle, orbitRadius);
+
+            GameObject satellite = Managers.Resource.Instantiate("Satellite/Satellite", GetObject((int)GameObjects.Satellite).transform);
+            satellite.transform.position = spawnPosition;
+            satellite.GetOrAddComponent<Satellite>();
+
+            satellites.Add(satellite);
+        }
+    }
+
+    private Vector2 GetCirclePosition(float angle, float radius)
+    {
+        float radian = Mathf.Deg2Rad * angle;
+        float x = transform.position.x + Mathf.Cos(radian) * radius;
+        float y = transform.position.y + Mathf.Sin(radian) * radius;
+        return new Vector2(x, y);
+    }
+
+    private void RotateSatellites()
+    {
+        for (int i = 0; i < satellites.Count; ++i)
+        {
+            satellites[i].transform.RotateAround(transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void ClearSatellites()
+    {
+        for (int i = 0; i < satellites.Count; ++i)
+        {
+            Managers.Resource.Destroy(satellites[i]);
+        }
+        satellites.Clear();
+    }
+
+    #endregion
 }
