@@ -12,10 +12,10 @@ public class Player : UI_Base
         Satellite
     }
 
-    public float speed = 3f;         // 플레이어의 이동 속도
-    private Vector2 inputDirection;  // 현재 입력 방향
-
+    private float speed = 2f;
+    private Vector2 inputDirection;
     private Monster target;
+    private List<Skill> skillList = new List<Skill>();
 
     public override bool Init()
     {
@@ -24,7 +24,16 @@ public class Player : UI_Base
 
         BindObject(typeof(GameObjects));
 
-        CreateSatellites(3);
+        {
+            KunaiSkill kunai = new KunaiSkill();
+            skillList.Add(kunai);
+        }
+
+        {
+            SatelliteSkill satellite = new SatelliteSkill(GetObject((int)GameObjects.Satellite).transform, 3, 3.0f);
+            skillList.Add(satellite);
+        }
+
         return _init = true;
     }
 
@@ -32,8 +41,7 @@ public class Player : UI_Base
     {
         UpdateMove();
         UpdateTarget();
-        UpdateAttack(); // 임시
-        RotateSatellites();
+        UpdateSkill();
     }
 
     // 입력 방향을 설정한다.
@@ -64,77 +72,12 @@ public class Player : UI_Base
         target = Managers.Monster.FindClosestMonster(transform.position);
     }
 
-    // 임시
-    private float tick = 0f;
-    private void UpdateAttack()
+    private void UpdateSkill()
     {
-        tick += Time.deltaTime;
-        if (tick > 1.0f)
+        foreach (Skill skill in skillList)
         {
-            Projectile proj = Managers.Resource.Instantiate("Projectile/Projectile").GetOrAddComponent<Projectile>();
-            Vector2 direction = Vector2.zero;
-            if (target == null)
-            {
-                float randomAngle = Random.Range(0f, 360f);
-                float radianAngle = Mathf.Deg2Rad * randomAngle;
-                direction = new Vector2(Mathf.Cos(radianAngle), Mathf.Sin(radianAngle));
-            }
-            else
-            {
-                direction = target.transform.position - transform.position;
-            }
-
-            proj.SetInfo(transform.position, direction.normalized);
-            tick = 0f;
+            // TODO : 스킬 봉인 처리
+            skill.Update(target);
         }
     }
-
-    #region Satellite
-    private float orbitRadius = 1f;
-    private float rotationSpeed = 200f;
-    private List<GameObject> satellites = new List<GameObject>();
-
-    private void CreateSatellites(int count)
-    {
-        ClearSatellites();
-
-        for (int i = 0; i < count; ++i)
-        {
-            float angle = i * 360f / count;
-            Vector2 spawnPosition = GetCirclePosition(angle, orbitRadius);
-
-            GameObject satellite = Managers.Resource.Instantiate("Satellite/Satellite", GetObject((int)GameObjects.Satellite).transform);
-            satellite.transform.position = spawnPosition;
-            satellite.GetOrAddComponent<Satellite>();
-
-            satellites.Add(satellite);
-        }
-    }
-
-    private Vector2 GetCirclePosition(float angle, float radius)
-    {
-        float radian = Mathf.Deg2Rad * angle;
-        float x = transform.position.x + Mathf.Cos(radian) * radius;
-        float y = transform.position.y + Mathf.Sin(radian) * radius;
-        return new Vector2(x, y);
-    }
-
-    private void RotateSatellites()
-    {
-        for (int i = 0; i < satellites.Count; ++i)
-        {
-            satellites[i].transform.RotateAround(transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
-        }
-    }
-
-    private void ClearSatellites()
-    {
-        for (int i = 0; i < satellites.Count; ++i)
-        {
-            Managers.Resource.Destroy(satellites[i]);
-        }
-        satellites.Clear();
-    }
-
-    #endregion
 }

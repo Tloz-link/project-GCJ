@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private int attack = 1;
+    private int attack;
     private float speed = 5f;
     private Vector2 direction = Vector2.zero;
 
-    public void SetInfo(Vector2 position, Vector2 direction)
+    public void SetInfo(int attack, Vector2 position, Vector2 direction)
     {
+        this.attack = attack;
         transform.position = position;
         this.direction = direction;
     }

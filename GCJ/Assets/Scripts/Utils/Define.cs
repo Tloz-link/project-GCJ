@@ -33,4 +33,11 @@ public class Define
     {
         Monster = 6
     }
+
+    public enum SkillType
+    {
+        Kunai,
+        Satellite,
+        Katana
+    }
 }
