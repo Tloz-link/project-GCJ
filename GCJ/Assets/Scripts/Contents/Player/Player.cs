@@ -9,12 +9,18 @@ public class Player : UI_Base
     enum GameObjects
     {
         Sprite,
-        Satellite
+        Satellite,
+        Direction
     }
 
     private float speed = 2f;
+
     private Vector2 inputDirection;
+    public Vector2 Direction { get; private set; } = Vector2.up;
+
     private Monster target;
+    public Monster Target { get { return target; } }
+
     private List<Skill> skillList = new List<Skill>();
 
     public override bool Init()
@@ -48,6 +54,14 @@ public class Player : UI_Base
     public void SetInputDirection(Vector2 direction)
     {
         inputDirection = direction;
+
+        if (direction != Vector2.zero)
+        {
+            Direction = direction;
+
+            float angle = Util.VectorToAngle(Direction) - 90f;
+            GetObject((int)GameObjects.Direction).transform.rotation = Quaternion.Euler(new Vector3(1f, 1f, angle));
+        }
     }
 
     private void UpdateMove()
@@ -77,7 +91,7 @@ public class Player : UI_Base
         foreach (Skill skill in skillList)
         {
             // TODO : 스킬 봉인 처리
-            skill.Update(target);
+            skill.Update();
         }
     }
 }

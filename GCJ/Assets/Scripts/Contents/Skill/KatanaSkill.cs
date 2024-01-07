@@ -14,7 +14,7 @@ public class KatanaSkill : Skill
         this.direction = direction;
     }
 
-    public override void Update(Monster target = null)
+    public override void Update()
     {
         // 스킬 연출 관련 Update처리는 여기서
 

@@ -8,7 +8,7 @@ public class KunaiSkill : Skill
     {
     }
 
-    public override void Update(Monster target = null)
+    public override void Update()
     {
         cooldownTick += Time.deltaTime;
         if (cooldownTick <= Cooldown)
@@ -17,9 +17,9 @@ public class KunaiSkill : Skill
 
         Projectile proj = Managers.Resource.Instantiate("Projectile/Projectile").GetOrAddComponent<Projectile>();
         Vector2 direction = Vector2.zero;
-        Transform player = Managers.Game.Player.transform;
+        Player player = Managers.Game.Player;
 
-        if (target == null)
+        if (player.Target == null)
         {
             float randomAngle = Random.Range(0f, 360f);
             float radianAngle = Mathf.Deg2Rad * randomAngle;
@@ -27,9 +27,9 @@ public class KunaiSkill : Skill
         }
         else
         {
-            direction = target.transform.position - player.position;
+            direction = player.Target.transform.position - player.transform.position;
         }
 
-        proj.SetInfo(Attack, player.position, direction.normalized);
+        proj.SetInfo(Attack, player.transform.position, direction.normalized);
     }
 }

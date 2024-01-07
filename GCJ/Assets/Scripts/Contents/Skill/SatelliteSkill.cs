@@ -17,7 +17,7 @@ public class SatelliteSkill : Skill
 
     private bool isTimeActive = false;
     private float durationTick = 0.0f;
-    public override void Update(Monster target = null)
+    public override void Update()
     {
         if (isTimeActive)
         {

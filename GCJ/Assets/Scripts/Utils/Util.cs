@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class Util
 {
+    public static float VectorToAngle(Vector2 direction)
+    {
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+
+    public static Vector2 AngleToVector(float angle)
+    {
+        float radianAngle = angle * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(radianAngle), Mathf.Sin(radianAngle));
+    }
+
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();

@@ -18,5 +18,5 @@ public abstract class Skill
         cooldownTick = cooldown; // 처음에는 바로 사용
     }
     
-    public abstract void Update(Monster target = null);
+    public abstract void Update();
 }
