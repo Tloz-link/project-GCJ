@@ -10,7 +10,8 @@ public class Player : UI_Base
     {
         Sprite,
         Satellite,
-        Direction
+        Katana, 
+        Direction // 에디터에서 인게임 실행 시 null참조오류 발생 -> 에디터에서 Player 자식오브젝트에 Direction 추가. @홍지형
     }
 
     private float speed = 2f;
@@ -30,14 +31,18 @@ public class Player : UI_Base
 
         BindObject(typeof(GameObjects));
 
-        {
-            KunaiSkill kunai = new KunaiSkill();
-            skillList.Add(kunai);
-        }
+        //{
+        //    KunaiSkill kunai = new KunaiSkill();
+        //    skillList.Add(kunai);
+        //}
 
+        //{
+        //    SatelliteSkill satellite = new SatelliteSkill(GetObject((int)GameObjects.Satellite).transform, 3, 3.0f);
+        //    skillList.Add(satellite);
+        //}
         {
-            SatelliteSkill satellite = new SatelliteSkill(GetObject((int)GameObjects.Satellite).transform, 3, 3.0f);
-            skillList.Add(satellite);
+            KatanaSkill katana = new KatanaSkill(GetObject((int)GameObjects.Katana).transform, Direction);
+            skillList.Add(katana);
         }
 
         return _init = true;
