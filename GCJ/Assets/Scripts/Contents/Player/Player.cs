@@ -41,7 +41,7 @@ public class Player : UI_Base
         //    skillList.Add(satellite);
         //}
         {
-            KatanaSkill katana = new KatanaSkill(GetObject((int)GameObjects.Katana).transform, Direction);
+            KatanaSkill katana = new KatanaSkill(GetObject((int)GameObjects.Katana).transform);
             skillList.Add(katana);
         }
 

@@ -13,6 +13,7 @@ public class Katana : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) // OnTriggerEnter2D와 다른점?
     {
+        Debug.Log("in");
         if (((1 << (int)Define.Layer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
