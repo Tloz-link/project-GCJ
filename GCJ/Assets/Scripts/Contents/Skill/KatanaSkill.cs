@@ -6,10 +6,13 @@ using UnityEngine;
 public class KatanaSkill : Skill
 {    
     private Transform parent;
-    private GameObject katana;    
-    private float swingAngle = 45f; // 휘두를 각도
-    private float swingSpeed = 5f; // 휘두르는 속도    
+    private GameObject katana;
+    private float swingAngle = 90f; // 휘두를 각도
+    private float swingSpeed = 10f; // 휘두르는 속도
+    private float swingDuration = 1.0f; // 휘두르는 지속 시간
+    private float swingTimer = 0.0f; // 휘두르는 타이머
     private bool isSwinging = false; // 휘두르고 있는지 여부
+
 
     // 2초에 한번 씩 사용되며 한 번 사용시 1초간 플레이어가 바라보는 방향에 부채꼴 범위 데미지 판정 
     public KatanaSkill(Transform parent) : base(1, 2.0f, Define.SkillType.Katana)
@@ -17,31 +20,37 @@ public class KatanaSkill : Skill
         this.parent = parent;
     }
     public override void Update()
-    {      
-        if (!isSwinging)
+    {
+        swingTimer += Time.deltaTime;
+
+        // 카타나를 휘두른다.
+        if (swingTimer < swingDuration)
         {
-            CreateKatana();
+            if (!isSwinging)
+            {
+                CreateKatana();
+            }
+            RotateKatana();
+            SwingKatana(); 
+        }
+        // 카타나 휘두르기를 멈춘다.
+        else
+        {
+            isSwinging = false;
+            ClearKatana(katana);
         }
 
-        // 스윙 중 업데이트
-        if (isSwinging)
-        {            
-            RotateKatana(); // 플레이어가 바라보는 방향으로 카타나를 회전시킨다.
-
-            SwingKatana(); // 카타나를 휘두른다.
+        // 카타나 휘두르기를 멈춘 이후
+        if (swingTimer >= swingDuration)
+        {
+            // 쿨타임 대기
+            cooldownTick += Time.deltaTime;
+            if (cooldownTick <= Cooldown)
+                return;
+            cooldownTick = 0.0f;
+            //             
+            swingTimer = 0.0f;
         }
-
-        // TODO: 쿨다운 현재 미구현.
-        Debug.Log("cooldownTick:" + cooldownTick);
-        Debug.Log("Cooldown:" + Cooldown);
-        cooldownTick += Time.deltaTime;
-        if (cooldownTick <= Cooldown)
-            return;
-        cooldownTick = 0.0f;
-        // 
-
-        // 쿨타임 지나고 스킬 사용 시작을 알리는 영역
-        isSwinging = false;
     }
 
     // 카타나를 생성한다.
@@ -68,7 +77,7 @@ public class KatanaSkill : Skill
         }        
     }
     
-    // 플레이어가 바라보는 방향으로 카타나의 방향을 움직인다.
+    // 플레이어가 바라보는 방향으로 카타나의 방향을 회전시킨다.
     private void RotateKatana()
     {
         if (Managers.Game.Player == null)
@@ -80,18 +89,17 @@ public class KatanaSkill : Skill
 
         Player player = Managers.Game.Player;        
         float angle = Mathf.Atan2(player.Direction.y, player.Direction.x) * Mathf.Rad2Deg;
-        // 카타나의 피벗 포인트를 플레이어 위치로 설정        
-        katana.transform.position = player.transform.position;
+
         // 플레이어의 방향에 맞추어 카타나 회전
         katana.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    // 카타나를 휘두른다.
+    // 카타나를 휘두른다. TODO: 차량 와이퍼같이 어색함이 있음.
     private void SwingKatana()
     {
-        // 휘두르는 애니메이션을 위한 왕복 회전        
+        // 휘두르는 동작을 위한 왕복 회전
         float swingFactor = Mathf.Sin(Time.time * swingSpeed) * swingAngle;
-        katana.transform.Rotate(Vector3.forward, swingFactor); // 참고) 카타나 sprite의 pivot: 왼쪽 끝으로 수정되어 있음.
+        katana.transform.Rotate(Vector3.forward, swingFactor); // 참고) 카타나 sprite의 pivot: 왼쪽 끝으로 수정 / box collider x축: 오프셋 +0.32 추가      
     }
 
 }
