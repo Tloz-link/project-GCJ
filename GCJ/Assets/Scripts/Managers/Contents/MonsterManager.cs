@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MonsterManager
 {
@@ -47,6 +48,29 @@ public class MonsterManager
             Managers.Resource.Destroy(monster.gameObject);
             monsters.Remove(id);
         }
+    }
+
+    public List<Monster> FindMonsterByRange(Vector2 position, float range)
+    {
+        List<Monster> list = new List<Monster>();
+
+        foreach (Monster monster in monsters.Values)
+        {
+            if (!monster.IsAlive())
+            {
+                continue;
+            }
+
+            float distance = Vector2.Distance(position, monster.transform.position);
+            if (distance > range)
+            {
+                continue;
+            }
+
+            list.Add(monster);
+        }
+
+        return list;
     }
 
     public Monster FindClosestMonster(Vector2 position)

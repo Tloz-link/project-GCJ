@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private int attack;
+    protected int attack;
     private float speed = 5f;
-    private Vector2 direction = Vector2.zero;
 
     public void SetInfo(int attack, Vector2 position, Vector2 direction)
     {
         this.attack = attack;
         transform.position = position;
-        this.direction = direction;
+
+        float angle = Util.VectorToAngle(direction);
+        transform.rotation = Quaternion.Euler(new Vector3(1f, 1f, angle));
     }
 
     private float tick = 0f;
     void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.Translate(Vector2.up * speed * Time.deltaTime);
 
         tick += Time.deltaTime;
         if (tick > 5f)

@@ -6,7 +6,7 @@ public class Util
 {
     public static float VectorToAngle(Vector2 direction)
     {
-        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
     }
 
     public static Vector2 AngleToVector(float angle)

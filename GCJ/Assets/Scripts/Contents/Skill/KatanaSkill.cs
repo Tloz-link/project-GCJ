@@ -65,9 +65,8 @@ public class KatanaSkill : Skill
         // Vector2 spawnPosition = new Vector2(player.transform.position.x + offset, player.transform.position.y /*+ offset*/);
 
         Vector2 spawnPosition = new Vector2(player.transform.position.x, player.transform.position.y);        
-        katana = Managers.Resource.Instantiate("Katana/Katana", parent);
+        katana = Managers.Resource.Instantiate("Area/Quarter", parent);
         katana.transform.position = spawnPosition;
-        katana.GetOrAddComponent<Katana>();
 
         // 생성할 방향을 정한다.
         float angle = Mathf.Atan2(player.Direction.y, player.Direction.x) * Mathf.Rad2Deg; 
@@ -102,7 +101,7 @@ public class KatanaSkill : Skill
             {
                 OnTriggerEnter(hitCollider);
             }
-        }        
+        }
     }
 
     // 피격 감지 시 동작
@@ -154,5 +153,4 @@ public class KatanaSkill : Skill
 
     //    return playerDirection;
     //}
-
 }

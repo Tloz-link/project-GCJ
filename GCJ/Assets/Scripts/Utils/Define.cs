@@ -38,6 +38,7 @@ public class Define
     {
         Kunai,
         Satellite,
-        Katana
+        Katana,
+        Rocket
     }
 }

@@ -37,6 +37,11 @@ public class Player : UI_Base
         }
 
         {
+            RocketSkill rocket = new RocketSkill();
+            skillList.Add(rocket);
+        }
+
+        {
             SatelliteSkill satellite = new SatelliteSkill(GetObject((int)GameObjects.Satellite).transform, 3, 3.0f);
             skillList.Add(satellite);
         }
@@ -65,7 +70,7 @@ public class Player : UI_Base
         {
             Direction = direction;
 
-            float angle = Util.VectorToAngle(Direction) - 90f;
+            float angle = Util.VectorToAngle(Direction);
             GetObject((int)GameObjects.Direction).transform.rotation = Quaternion.Euler(new Vector3(1f, 1f, angle));
         }
     }
