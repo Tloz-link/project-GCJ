@@ -13,7 +13,7 @@ public class Satellite : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (((1 << (int)Define.Layer.Monster) & (1 << other.gameObject.layer)) != 0)
+        if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
             monster.Damaged(attack);

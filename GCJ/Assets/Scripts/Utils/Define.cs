@@ -2,43 +2,79 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Define
+public static class Define
 {
-    public enum Scene
+    public enum EScene
     {
         Unknown,
-        Login,
-        Lobby,
-        Game,
+        TitleScene,
+        GameScene,
     }
 
-    public enum Sound
+    public enum EUIEvent
+    {
+        Click,
+        PointerDown,
+        PointerUp,
+        Drag,
+    }
+
+    public enum EJoystickState
+    {
+        PointerDown,
+        PointerUp,
+        Drag,
+    }
+
+    public enum ESound
     {
         Bgm,
         Effect,
-        MaxCount,
+        Max,
     }
 
-    public enum UIEvent
+    public enum EObjectType
     {
-        Click,
-        Pressed,
-        PressedLong,
-        PointerDown,
-        PointerUp,
-        PointerExit
+        None,
+        Creature,
+        Projectile,
+        Env,
     }
 
-    public enum Layer
+    public enum ECreatureType
     {
-        Monster = 6
+        None,
+        Hero,
+        Monster,
+        Npc,
     }
 
-    public enum SkillType
+    public enum ECreatureState
+    {
+        None,
+        Idle,
+        Move,
+        Skill,
+        Dead
+    }
+
+    public enum ESkillType
     {
         Kunai,
         Satellite,
         Katana,
         Rocket
     }
+
+    public enum ELayer
+    {
+        Monster = 6
+    }
+}
+
+public static class AnimName
+{
+    public const string IDLE = "idle";
+    public const string MOVE = "move";
+    public const string DEAD = "dead";
 }

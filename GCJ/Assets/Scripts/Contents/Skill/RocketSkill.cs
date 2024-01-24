@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RocketSkill : Skill
 {
-    public RocketSkill() : base(3, 4.0f, Define.SkillType.Rocket)
+    public RocketSkill() : base(3, 4.0f, Define.ESkillType.Rocket)
     {
     }
 
@@ -16,7 +16,7 @@ public class RocketSkill : Skill
         cooldownTick = 0.0f;
 
         Rocket rocket = Managers.Resource.Instantiate("Projectile/Rocket").GetOrAddComponent<Rocket>();
-        Player player = Managers.Game.Player;
-        rocket.SetInfo(Attack, player.transform.position, player.Direction);
+        Hero hero = Managers.Object.Hero;
+        rocket.SetInfo(Attack, hero.transform.position, hero.Direction);
     }
 }

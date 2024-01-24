@@ -8,11 +8,11 @@ public class Managers : MonoBehaviour
     static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
 
     #region Contents
-    GameManagerEx _game = new GameManagerEx();
-    MonsterManager _monster = new MonsterManager();
+    private GameManager _game = new GameManager();
+    private ObjectManager _object = new ObjectManager();
 
-    public static GameManagerEx Game { get { return Instance._game; } }
-    public static MonsterManager Monster { get {  return Instance._monster; } }
+    public static GameManager Game { get { return Instance._game; } }
+    public static ObjectManager Object { get { return Instance?._object; } }
 	#endregion
 
 	#region Core
@@ -60,29 +60,4 @@ public class Managers : MonoBehaviour
             s_instance._sound.Init();
         }
 	}
-
-    public static void StartGame()
-    {
-        if (s_instance == null)
-        {
-            Init();
-        }
-
-        Game.Init();
-        Monster.Init();
-    }
-
-    public static void ClearGame()
-    {
-        Game.Clear();
-        Monster.Clear();
-    }
-
-    public static void Clear()
-    {
-        Sound.Clear();
-        Scene.Clear();
-        UI.Clear();
-        Pool.Clear();
-    }
 }

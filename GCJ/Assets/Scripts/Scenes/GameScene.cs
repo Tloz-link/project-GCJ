@@ -1,27 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameScene : BaseScene
 {
-    protected override void Init()
+    public override bool Init()
     {
-        base.Init();
+        if (base.Init() == false)
+            return false;
 
-        SceneType = Define.Scene.Game;
-        Managers.StartGame();
+        SceneType = Define.EScene.GameScene;
 
-        //Managers.UI.ShowSceneUI<UI_Inven>();
-        //Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
-        //gameObject.GetOrAddComponent<CursorController>();
+        Managers.Object.Spawn<Hero>(new Vector3(0f, -4f, 0f));
+        Camera.main.GetOrAddComponent<FollowCamera>();
 
-        //GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "UnityChan");
-        //Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(player);
+        //for (int i = 0; i < 5; ++i)
+        //    Managers.Object.Spawn<Monster>(new Vector3(-3f, 0f, 0f));
 
-        ////Managers.Game.Spawn(Define.WorldObject.Monster, "Knight");
-        //GameObject go = new GameObject { name = "SpawningPool" };
-        //SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
-        //pool.SetKeepMonsterCount(2);
+        Managers.UI.ShowBaseUI<UI_Joystick>();
+
+        return true;
     }
 
     public override void Clear()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KunaiSkill : Skill
 {
-    public KunaiSkill() : base(1, 2.0f, Define.SkillType.Kunai)
+    public KunaiSkill() : base(1, 2.0f, Define.ESkillType.Kunai)
     {
     }
 
@@ -15,11 +15,11 @@ public class KunaiSkill : Skill
             return;
         cooldownTick = 0.0f;
 
-        Projectile proj = Managers.Resource.Instantiate("Projectile/Projectile").GetOrAddComponent<Projectile>();
         Vector2 direction = Vector2.zero;
-        Player player = Managers.Game.Player;
+        Hero hero = Managers.Object.Hero;
+        Monster target = Managers.Object.FindClosestMonster(hero.transform.position);
 
-        if (player.Target == null)
+        if (target == null)
         {
             float randomAngle = Random.Range(0f, 360f);
             float radianAngle = Mathf.Deg2Rad * randomAngle;
@@ -27,9 +27,10 @@ public class KunaiSkill : Skill
         }
         else
         {
-            direction = player.Target.transform.position - player.transform.position;
+            direction = target.transform.position - hero.transform.position;
         }
 
-        proj.SetInfo(Attack, player.transform.position, direction.normalized);
+        Projectile proj = Managers.Resource.Instantiate("Projectile/Projectile").GetOrAddComponent<Projectile>();
+        proj.SetInfo(Attack, hero.transform.position, direction.normalized);
     }
 }

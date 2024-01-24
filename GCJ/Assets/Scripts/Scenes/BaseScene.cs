@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Define;
 
-public abstract class BaseScene : MonoBehaviour
+public abstract class BaseScene : InitBase
 {
-    public Define.Scene SceneType { get; protected set; } = Define.Scene.Unknown;
+    public EScene SceneType { get; protected set; } = EScene.Unknown;
 
-	void Awake()
-	{
-		Init();
-	}
-
-	protected virtual void Init()
+    public override bool Init()
     {
+        if (base.Init() == false)
+            return false;
+
         Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
         if (obj == null)
-            Managers.Resource.Instantiate("UI/EventSystem").name = "@EventSystem";
+        {
+            GameObject go = new GameObject() { name = "@EventSystem" };
+            go.AddComponent<EventSystem>();
+            go.AddComponent<StandaloneInputModule>();
+        }
+
+        return true;
     }
 
     public abstract void Clear();

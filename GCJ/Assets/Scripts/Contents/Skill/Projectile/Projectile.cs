@@ -13,7 +13,7 @@ public class Projectile : MonoBehaviour
         transform.position = position;
 
         float angle = Util.VectorToAngle(direction);
-        transform.rotation = Quaternion.Euler(new Vector3(1f, 1f, angle));
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
     }
 
     private float tick = 0f;
@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
     private bool isCollided = false;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (((1 << (int)Define.Layer.Monster) & (1 << other.gameObject.layer)) != 0)
+        if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             if (isCollided)
                 return;

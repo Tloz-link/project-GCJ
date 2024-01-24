@@ -8,7 +8,7 @@ public class SatelliteSkill : Skill
     private int count;
     private float durationTime;
 
-    public SatelliteSkill(Transform parent, int count, float durationTime) : base(1, 7.0f, Define.SkillType.Satellite)
+    public SatelliteSkill(Transform parent, int count, float durationTime) : base(1, 7.0f, Define.ESkillType.Satellite)
     {
         this.parent = parent;
         this.count = count;
@@ -64,21 +64,21 @@ public class SatelliteSkill : Skill
 
     private Vector2 GetCirclePosition(float angle, float radius)
     {
-        Transform player = Managers.Game.Player.transform;
+        Transform hero = Managers.Object.Hero.transform;
 
         float radian = Mathf.Deg2Rad * angle;
-        float x = player.position.x + Mathf.Cos(radian) * radius;
-        float y = player.position.y + Mathf.Sin(radian) * radius;
+        float x = hero.position.x + Mathf.Cos(radian) * radius;
+        float y = hero.position.y + Mathf.Sin(radian) * radius;
         return new Vector2(x, y);
     }
 
     private void RotateSatellites()
     {
-        Transform player = Managers.Game.Player.transform;
+        Transform hero = Managers.Object.Hero.transform;
 
         foreach (GameObject satellite in satellites)
         {
-            satellite.transform.RotateAround(player.position, Vector3.forward, rotationSpeed * Time.deltaTime);
+            satellite.transform.RotateAround(hero.position, Vector3.forward, rotationSpeed * Time.deltaTime);
         }
     }
 

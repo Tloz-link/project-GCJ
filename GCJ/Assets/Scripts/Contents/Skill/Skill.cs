@@ -6,10 +6,10 @@ public abstract class Skill
 {
     public int Attack { get; private set; }
     public float Cooldown { get; private set; }
-    public Define.SkillType SkillType { get; private set; }
+    public Define.ESkillType SkillType { get; private set; }
 
     protected float cooldownTick;
-    public Skill(int attack, float cooldown, Define.SkillType skillType)
+    public Skill(int attack, float cooldown, Define.ESkillType skillType)
     {
         Attack = attack;
         Cooldown = cooldown;

@@ -6,21 +6,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class UI_Base : MonoBehaviour
+public abstract class UI_Base : InitBase
 {
 	protected Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-    protected bool _init = false;
 
-    public virtual bool Init()
-    {
-        if (_init)
-            return false;
-
-        return _init = true;
-    }
-
-
-    private void Start()
+    private void Awake()
     {
         Init();
     }
@@ -62,28 +52,28 @@ public abstract class UI_Base : MonoBehaviour
     public TextMeshProUGUI GetText(int idx) { return Get<TextMeshProUGUI>(idx); }
     public Button GetButton(int idx) { return Get<Button>(idx); }
 
-    public static void BindEvent(GameObject go, Action action, Define.UIEvent type = Define.UIEvent.Click)
-	{
-		UI_EventHandler evt = go.GetOrAddComponent<UI_EventHandler>();
+    public static void BindEvent(GameObject go, Action<PointerEventData> action = null, Define.EUIEvent type = Define.EUIEvent.Click)
+    {
+        UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
 
-		switch (type)
-		{
-			case Define.UIEvent.Click:
-				evt.OnClickHandler -= action;
-				evt.OnClickHandler += action;
-				break;
-			case Define.UIEvent.Pressed:
-				evt.OnPressedHandler -= action;
-				evt.OnPressedHandler += action;
-				break;
-            case Define.UIEvent.PointerDown:
+        switch (type)
+        {
+            case Define.EUIEvent.Click:
+                evt.OnClickHandler -= action;
+                evt.OnClickHandler += action;
+                break;
+            case Define.EUIEvent.PointerDown:
                 evt.OnPointerDownHandler -= action;
                 evt.OnPointerDownHandler += action;
                 break;
-            case Define.UIEvent.PointerUp:
+            case Define.EUIEvent.PointerUp:
                 evt.OnPointerUpHandler -= action;
                 evt.OnPointerUpHandler += action;
                 break;
+            case Define.EUIEvent.Drag:
+                evt.OnDragHandler -= action;
+                evt.OnDragHandler += action;
+                break;
         }
-	}
+    }
 }
