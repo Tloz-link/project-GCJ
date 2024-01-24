@@ -15,10 +15,12 @@ public class GameScene : BaseScene
         Managers.Object.Spawn<Hero>(new Vector3(0f, -4f, 0f));
         Camera.main.GetOrAddComponent<FollowCamera>();
 
-        //for (int i = 0; i < 5; ++i)
-        //    Managers.Object.Spawn<Monster>(new Vector3(-3f, 0f, 0f));
+        for (int i = 0; i < 5; ++i)
+            Managers.Object.Spawn<Monster>(new Vector3(-3f, 0f, 0f));
 
         Managers.UI.ShowBaseUI<UI_Joystick>();
+
+        Managers.UI.ShowSceneUI<UI_GameScene>();
 
         return true;
     }
