@@ -7,6 +7,7 @@ public class BaseObject : InitBase
 {
     public EObjectType ObjectType { get; protected set; } = EObjectType.None;
     public CircleCollider2D Collider { get; private set; }
+    public Animator Animator { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
 
     //public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
@@ -30,6 +31,7 @@ public class BaseObject : InitBase
             return false;
 
         Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
+        Animator = gameObject.GetComponentInChildren<Animator>();
         RigidBody = GetComponent<Rigidbody2D>();
 
         return true;
@@ -46,11 +48,7 @@ public class BaseObject : InitBase
     }
 
     #region Animation
-    protected virtual void UpdateAnimation()
-    {
-    }
-
-    public void PlayAnimation(string AnimName, bool loop)
+    protected virtual void PlayAnimation(Define.ECreatureState state)
     {
 
     }

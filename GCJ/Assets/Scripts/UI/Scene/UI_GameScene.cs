@@ -11,7 +11,7 @@ public class UI_GameScene : UI_Scene
 
     enum Texts
     {
-        TimeText
+        
     }
 
     // 1) 플레이 시간
@@ -29,7 +29,6 @@ public class UI_GameScene : UI_Scene
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
 
-        GetText((int)Texts.TimeText).text = "30";
         // 생성자 역할
 
         return true;

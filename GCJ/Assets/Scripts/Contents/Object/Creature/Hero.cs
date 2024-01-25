@@ -89,6 +89,11 @@ public class Hero : Creature
         }
     }
 
+    protected override void PlayAnimation(Define.ECreatureState state)
+    {
+        Animator.SetInteger("state", (int)state);
+    }
+
     private void HandleOnMoveDirChanged(Vector2 dir)
     {
         _moveDir = dir;
@@ -102,9 +107,9 @@ public class Hero : Creature
         switch (joystickState)
         {
             case Define.EJoystickState.PointerDown:
-                CreatureState = Define.ECreatureState.Move;
                 break;
             case Define.EJoystickState.Drag:
+                CreatureState = Define.ECreatureState.Move;
                 break;
             case Define.EJoystickState.PointerUp:
                 CreatureState = Define.ECreatureState.Idle;

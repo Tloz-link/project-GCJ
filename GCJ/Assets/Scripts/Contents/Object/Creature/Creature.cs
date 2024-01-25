@@ -19,7 +19,7 @@ public class Creature : BaseObject
             if (_creatureState != value)
             {
                 _creatureState = value;
-                UpdateAnimation();
+                PlayAnimation(value);
             }
         }
     }
@@ -32,28 +32,6 @@ public class Creature : BaseObject
         ObjectType = EObjectType.Creature;
         CreatureState = ECreatureState.Idle;
         return true;
-    }
-
-    protected override void UpdateAnimation()
-    {
-        switch (CreatureState)
-        {
-            case ECreatureState.Idle:
-                PlayAnimation(AnimName.IDLE, true);
-                break;
-            case ECreatureState.Skill:
-                PlayAnimation(AnimName.IDLE, true);
-                break;
-            case ECreatureState.Move:
-                PlayAnimation(AnimName.MOVE, true);
-                break;
-            case ECreatureState.Dead:
-                PlayAnimation(AnimName.DEAD, true);
-                RigidBody.simulated = false;
-                break;
-            default:
-                break;
-        }
     }
 
     #region AI
