@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static Define;
 
 public class UI_Joystick : UI_Base
@@ -22,7 +23,6 @@ public class UI_Joystick : UI_Base
     {
         if (base.Init() == false)
             return false;
-
         BindObject(typeof(GameObjects));
 
         _background = GetObject((int)GameObjects.JoystickBG);
@@ -37,8 +37,9 @@ public class UI_Joystick : UI_Base
     }
 
     #region Event
+    // TouchPanel의 영역만 터치가 동작한다.
     public void OnPointerDown(PointerEventData eventData)
-    {
+    {       
         _background.transform.position = eventData.position;
         _cursor.transform.position = eventData.position;
         _touchPos = eventData.position;
