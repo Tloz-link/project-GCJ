@@ -13,8 +13,12 @@ public class Monster : Creature
 
         CreatureType = ECreatureType.Monster;
         CreatureState = ECreatureState.Idle;
+        Collider.excludeLayers = ~(1 << (int)Define.ELayer.Hero);
+        Collider.includeLayers = (1 << (int)Define.ELayer.Hero);
+
         Speed = 3.0f;
-        HP = 3;
+        Hp = 3;
+        Attack = 2;
 
         _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
         _agent.updateRotation = false;
@@ -29,12 +33,32 @@ public class Monster : Creature
 
     public void Damaged(int damage)
     {
-        HP -= damage;
-        if (HP <= 0)
+        Hp -= damage;
+        if (Hp <= 0)
         {
             Managers.Object.Despawn<Monster>(this);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        BaseObject target = other.GetComponent<BaseObject>();
+
+        // TODO
+        target.OnDamaged(this);
+    }
+
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+    }
+    #endregion
 
     #region AI
     private NavMeshAgent _agent;

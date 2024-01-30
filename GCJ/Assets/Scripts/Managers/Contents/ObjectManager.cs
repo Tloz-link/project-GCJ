@@ -98,7 +98,7 @@ public class ObjectManager
 
         foreach (Monster monster in Monsters)
         {
-            if (monster.HP <= 0)
+            if (monster.Hp <= 0)
             {
                 continue;
             }
@@ -122,7 +122,7 @@ public class ObjectManager
 
         foreach (Monster monster in Monsters)
         {
-            if (monster.HP <= 0)
+            if (monster.Hp <= 0)
             {
                 continue;
             }
