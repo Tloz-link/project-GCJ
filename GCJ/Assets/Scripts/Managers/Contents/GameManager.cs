@@ -79,7 +79,7 @@ public class GameManager
     }
 
 
-    private float _hp = 0; // 현재체력. @홍지형
+    private float _hp = 50; // 현재체력. @홍지형
     public float HP
     {
         get { return _hp; }
@@ -90,7 +90,7 @@ public class GameManager
     }
 
 
-    private float _exp = 0; // 경험치. @홍지형
+    private float _exp = 50; // 경험치. @홍지형
     public float Exp
     {
         get { return _exp; }

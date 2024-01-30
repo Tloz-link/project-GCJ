@@ -86,11 +86,6 @@ public class UI_GameScene : UI_Scene
         _timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         
         Managers.Game.CurrentTime = _timeElapsed; // GameManager에 현재시간을 저장한다.
-
-        // 디버그용.
-        Managers.Game.HP += 0.05f; 
-        Managers.Game.Exp += 0.05f; 
-        Managers.Game.Gold += 1;
         
         UpdateHealthBar(Managers.Game.HP, 100); // 최대값을 100으로 임의설정.
         UpdateExpBar(Managers.Game.Exp, 100);
