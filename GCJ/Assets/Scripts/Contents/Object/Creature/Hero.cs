@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using static Define;
 
@@ -26,7 +27,7 @@ public class Hero : Creature
 
         CreatureType = ECreatureType.Hero;
         CreatureState = ECreatureState.Idle;
-        HP = 5;
+        Hp = 5;
         Speed = 2.0f;
 
         Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
@@ -34,25 +35,25 @@ public class Hero : Creature
         Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
-        {
-            KunaiSkill kunai = new KunaiSkill();
-            _skills.Add(kunai);
-        }
+        //{
+        //    KunaiSkill kunai = new KunaiSkill();
+        //    _skills.Add(kunai);
+        //}
 
-        {
-            RocketSkill rocket = new RocketSkill();
-            _skills.Add(rocket);
-        }
+        //{
+        //    RocketSkill rocket = new RocketSkill();
+        //    _skills.Add(rocket);
+        //}
 
-        {
-            SatelliteSkill satellite = new SatelliteSkill(_childs[(int)GameObjects.Satellite].transform, 3, 3.0f);
-            _skills.Add(satellite);
-        }
+        //{
+        //    SatelliteSkill satellite = new SatelliteSkill(_childs[(int)GameObjects.Satellite].transform, 3, 3.0f);
+        //    _skills.Add(satellite);
+        //}
 
-        {
-            KatanaSkill katana = new KatanaSkill(transform);
-            _skills.Add(katana);
-        }
+        //{
+        //    KatanaSkill katana = new KatanaSkill(transform);
+        //    _skills.Add(katana);
+        //}
 
         return true;
     }
@@ -118,4 +119,20 @@ public class Hero : Creature
                 break;
         }
     }
+
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+        base.OnDamaged(attacker);
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+
+        _moveDir = Vector2.zero;
+        Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
+        Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
+    }
+    #endregion
 }

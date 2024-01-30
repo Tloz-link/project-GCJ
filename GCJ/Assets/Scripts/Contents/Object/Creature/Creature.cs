@@ -5,17 +5,22 @@ using static Define;
 
 public class Creature : BaseObject
 {
-    public int HP { get; protected set; } = 5;
+    public int Hp { get; protected set; } = 5;
+    public int Attack { get; protected set; } = 2;
     public float Speed { get; protected set; } = 1.0f;
 
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
+    protected bool _freezeStateOneFrame = false;
     protected ECreatureState _creatureState = ECreatureState.None;
     public virtual ECreatureState CreatureState
     {
         get { return _creatureState; }
         set
         {
+            if (_freezeStateOneFrame)
+                return;
+
             if (_creatureState != value)
             {
                 _creatureState = value;
@@ -34,6 +39,11 @@ public class Creature : BaseObject
         return true;
     }
 
+    private void LateUpdate()
+    {
+        _freezeStateOneFrame = false;
+    }
+
     #region AI
     public float UpdateAITick { get; protected set; } = 0.0f;
 
@@ -49,8 +59,11 @@ public class Creature : BaseObject
                 case ECreatureState.Move:
                     UpdateMove();
                     break;
-                case ECreatureState.Skill:
-                    UpdateSkill();
+                case ECreatureState.Attack:
+                    UpdateAttack();
+                    break;
+                case ECreatureState.Hit:
+                    UpdateHit();
                     break;
                 case ECreatureState.Dead:
                     UpdateDead();
@@ -66,8 +79,39 @@ public class Creature : BaseObject
 
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateMove() { }
-    protected virtual void UpdateSkill() { }
+    protected virtual void UpdateAttack() { }
+    protected virtual void UpdateHit() { }
     protected virtual void UpdateDead() { }
+    #endregion
+
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+        base.OnDamaged(attacker);
+
+        Creature creature = attacker as Creature;
+        if (creature == null)
+            return;
+
+        Hp -= creature.Attack;
+        Debug.Log("Current Hp : " + Hp);
+
+        if (Hp <= 0)
+        {
+            OnDead(attacker);
+            CreatureState = ECreatureState.Dead;
+        }
+        else
+        {
+            CreatureState = ECreatureState.Hit;
+            _freezeStateOneFrame = true;
+        }
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+    }
     #endregion
 
     #region Wait
