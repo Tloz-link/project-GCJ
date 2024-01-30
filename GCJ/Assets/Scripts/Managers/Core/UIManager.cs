@@ -7,6 +7,8 @@ public class UIManager
     int _order = 10;
 
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
+    public int GetPopupStackCount() { return _popupStack.Count; } // @홍지형
+
     UI_Scene _sceneUI = null;
 
     public GameObject Root

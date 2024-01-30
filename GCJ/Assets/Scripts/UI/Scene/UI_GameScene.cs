@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// ÀÎ°ÔÀÓ È­¸éÀÇ UI¸¦ ´ã´çÇÏ´Â Å¬·¡½º. @È«ÁöÇü
+// ì¸ê²Œì„ í™”ë©´ì˜ UIë¥¼ ë‹´ë‹¹í•˜ëŠ” í´ë˜ìŠ¤. @í™ì§€í˜•
 public class UI_GameScene : UI_Scene
 {
     enum GameObjects
@@ -26,35 +23,23 @@ public class UI_GameScene : UI_Scene
     {
         PauseBtn,
     }
+    // 1) í”Œë ˆì´ ì‹œê°„
+    private TextMeshProUGUI _timerText; // ì¸ê²Œì„ í”Œë ˆì´ ì‹œê°„ íƒ€ì´ë¨¸
+    private float _timeElapsed;         // íƒ€ì´ë¨¸ë¥¼ ìœ„í•œ ë³€ìˆ˜
 
-    // 1) ÇÃ·¹ÀÌ ½Ã°£
-    private TextMeshProUGUI _timerText; // ÀÎ°ÔÀÓ ÇÃ·¹ÀÌ ½Ã°£ Å¸ÀÌ¸Ó
-    private float _timeElapsed;         // Å¸ÀÌ¸Ó¸¦ À§ÇÑ º¯¼ö
+    // 2) ì •ì§€ ë²„íŠ¼ 
+    private Button _pauseBtn;           // ì¼ì‹œì •ì§€ ë²„íŠ¼    
 
-    // 2) Á¤Áö ¹öÆ° 
-    private Button _pauseBtn;           // ÀÏ½ÃÁ¤Áö ¹öÆ°
-    private bool _isGamePaused = false; // °ÔÀÓÀÇ ÀÏ½ÃÁ¤Áö »óÅÂ¸¦ ÃßÀûÇÏ´Â º¯¼ö
-   
-    // TODO: Á¤ÁöÆË¾÷Ã¢ ±¸Çö
-    // TODO: Á¤ÁöÆË¾÷Ã¢:
-    // ³ª°¡±â, µ¹¾Æ°¡±â, ¼Ò¸®Á¦°Å ¹öÆ°
+    // 3) ê²½í—˜ì¹˜ë°”
+    private Image _expBar;              // ê²½í—˜ì¹˜ ë°”
 
-    // 3) °æÇèÄ¡¹Ù
-    private Image _expBar;              // °æÇèÄ¡ ¹Ù
+    // 4) ì²´ë ¥ë°”
+    private Image _hpBar;           // ì²´ë ¥ ë°”
 
-    // 4) Ã¼·Â¹Ù
-    private Image _hpBar;           // Ã¼·Â ¹Ù
+    // 5) ë³´ìŠ¤ì²´ë ¥ë°” <- ë³´ìŠ¤ ìƒê¸°ë©´
 
-    // 5) º¸½ºÃ¼·Â¹Ù <- º¸½º »ı±â¸é
-
-    // 6) °ñµå È¹µæ·® (¼öÁ¤ °¡´É¼º ÀÖÀ½ ¿ì¼±¼øÀ§ Á¦ÀÏ µÚ)
-    private TextMeshProUGUI _goldText;  // °ñµå È¹µæ·®
-
-    // 7) ¸ó½ºÅÍ Ã³Ä¡¼ö (Á¤ÁöÆË¾÷ ¾È¿¡)
-
-    private GameObject _joystickUI; // Á¶ÀÌ½ºÆ½ UIÀÇ GameObject ÂüÁ¶
-    private float testFloatVal = 0;
-    private int testIntVal = 0;
+    // 6) ê³¨ë“œ íšë“ëŸ‰ (ìˆ˜ì • ê°€ëŠ¥ì„± ìˆìŒ ìš°ì„ ìˆœìœ„ ì œì¼ ë’¤)
+    private TextMeshProUGUI _goldText;  // ê³¨ë“œ íšë“ëŸ‰
 
     public override bool Init()
     {
@@ -64,9 +49,8 @@ public class UI_GameScene : UI_Scene
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         BindButton(typeof(Buttons));
-        BindImage(typeof(Images));
+        BindImage(typeof(Images));        
 
-        _joystickUI = GameObject.Find("UI_Joystick");
         _timerText = GetText((int)Texts.Timer);
         _goldText = GetText((int)Texts.Gold);
         _pauseBtn = GetButton((int)Buttons.PauseBtn);
@@ -80,20 +64,20 @@ public class UI_GameScene : UI_Scene
 
     void Update()
     {
-        // Å¸ÀÌ¸Ó¿Í °ÔÀÓ »óÅÂ ¾÷µ¥ÀÌÆ®
-        if (!_isGamePaused)
+        // íƒ€ì´ë¨¸ì™€ ê²Œì„ ìƒíƒœ ì—…ë°ì´íŠ¸
+        if (!Managers.Game.IsGamePaused)
         {
             UpdateTimer();
         }
     }
 
-    // ÀÌº¥Æ® ¹ÙÀÎµù ÃÊ±âÈ­ÇÑ´Ù.
+    // ì´ë²¤íŠ¸ ë°”ì¸ë”© ì´ˆê¸°í™”í•œë‹¤.
     private void InitEvents()
     {        
-        _pauseBtn.onClick.AddListener(TogglePause);
+        _pauseBtn.onClick.AddListener(TogglePause);        
     }
 
-    // 1ÃÊ¸¶´Ù Å¸ÀÌ¸Ó¸¦ °»½ÅÇÑ´Ù.
+    // 1ì´ˆë§ˆë‹¤ íƒ€ì´ë¨¸ë¥¼ ê°±ì‹ í•œë‹¤.
     private void UpdateTimer()
     {
         _timeElapsed += Time.deltaTime;
@@ -101,56 +85,71 @@ public class UI_GameScene : UI_Scene
         int seconds = (int)(_timeElapsed % 60);
         _timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         
-        Managers.Game.CurrentTime = _timeElapsed; // GameManager¿¡ ÇöÀç½Ã°£À» ÀúÀåÇÑ´Ù.
+        Managers.Game.CurrentTime = _timeElapsed; // GameManagerì— í˜„ì¬ì‹œê°„ì„ ì €ì¥í•œë‹¤.
 
-        // µğ¹ö±×¿ë.
-        // TODO: ¿ÜºÎ¿¡¼­ °è»êµÈ °ªÀ» ºÒ·¯¿Í¾ß ÇÑ´Ù.
-        testFloatVal += 0.05f;
-        testIntVal += 1;
-        UpdateHealthBar(testFloatVal, 100);
-        UpdateExpBar(testFloatVal, 100);
-        UpdateGoldText(testIntVal);
+        // ë””ë²„ê·¸ìš©.
+        Managers.Game.HP += 0.05f; 
+        Managers.Game.Exp += 0.05f; 
+        Managers.Game.Gold += 1;
+        
+        UpdateHealthBar(Managers.Game.HP, 100); // ìµœëŒ€ê°’ì„ 100ìœ¼ë¡œ ì„ì˜ì„¤ì •.
+        UpdateExpBar(Managers.Game.Exp, 100);
+        UpdateGoldText(Managers.Game.Gold);
         //
 
     }
 
-    // ÀÏ½ÃÁ¤Áö ¹öÆ° Å¬¸¯ ½Ã µ¿ÀÛÇÑ´Ù.
+    // ê²Œì„ ì§„í–‰ ì¼ì‹œì •ì§€/ì¬ê°œ í† ê¸€
     private void TogglePause()
-    {
-        // Debug.Log("TogglePause()");
-        _isGamePaused = !_isGamePaused;
-        
-        Time.timeScale = _isGamePaused ? 0 : 1;
+    {        
+        Managers.Game.IsGamePaused = !Managers.Game.IsGamePaused;
+        bool _isGamePaused = Managers.Game.IsGamePaused;
 
-        // Á¶ÀÌ½ºÆ½ UI È°¼ºÈ­/ºñÈ°¼ºÈ­
-        if (_joystickUI != null)
+        Time.timeScale = _isGamePaused ? 0 : 1;           // ì¸ê²Œì„ ì •ì§€
+        _pauseBtn.enabled = _isGamePaused ? false : true; // ë²„íŠ¼ í´ë¦­ í† ê¸€
+
+        // ì¡°ì´ìŠ¤í‹± UI í™œì„±í™”/ë¹„í™œì„±í™”        
+        if (Managers.Game.JoystickUI != null)
         {
-            _joystickUI.SetActive(!_isGamePaused);
+            Managers.Game.JoystickUI.SetActive(!_isGamePaused);
         }
 
-        // TODO: Á¤ÁöÆË¾÷Ã¢ Ãâ·Â
+        if (_isGamePaused == true)
+        {
+            ShowPopupUI();
+        }
     }
 
-    // Ã¼·Â¹Ù¸¦ °»½ÅÇÑ´Ù.    
-    public void UpdateHealthBar(float currentHealth, float maxHealth)
-    {
-        // TODO: ¿ÜºÎ¿¡¼­ °è»êµÈ Ã¼·Â°ªÀ» ºÒ·¯¿Í¾ß ÇÑ´Ù.
+    // íŒì—…ì°½ì„ ì—°ë‹¤.
+    public virtual void ShowPopupUI()
+    {        
+        UI_Pause pausePopup = Managers.UI.ShowPopupUI<UI_Pause>(); // ì •ì§€íŒì—…ì°½ ì¶œë ¥
+        pausePopup.SetOnCloseCallback(OnPopupClosed);
+    }
+
+    // íŒì—…ì°½ì´ ë‹«í˜”ì„ ë•Œ ë™ì‘í•œë‹¤.
+    private void OnPopupClosed()
+    {        
+        _pauseBtn.enabled = true; // ì¼ì‹œì •ì§€ ë²„íŠ¼ í™œì„±í™”
+    }
+
+    // ì²´ë ¥ë°”ë¥¼ ê°±ì‹ í•œë‹¤.    
+    private void UpdateHealthBar(float currentHealth, float maxHealth)
+    {        
         _hpBar.fillAmount = currentHealth / maxHealth;
         
     }
 
-    // °æÇèÄ¡¹Ù¸¦ °»½ÅÇÑ´Ù.
-    public void UpdateExpBar(float currentExp, float maxExp)
+    // ê²½í—˜ì¹˜ë°”ë¥¼ ê°±ì‹ í•œë‹¤.
+    private void UpdateExpBar(float currentExp, float maxExp)
     {
-        // TODO: ¿ÜºÎ¿¡¼­ °è»êµÈ °æÇèÄ¡°ªÀ» ºÒ·¯¿Í¾ß ÇÑ´Ù.
         _expBar.fillAmount = currentExp / maxExp;
     }
-    
-    // °ñµåÈ¹µæ·®À» °»½ÅÇÑ´Ù.
-    public void UpdateGoldText(int goldAmount)
+
+    // ê³¨ë“œíšë“ëŸ‰ì„ ê°±ì‹ í•œë‹¤.
+    private void UpdateGoldText(int goldAmount)
     {
-        // TODO: ¿ÜºÎ¿¡¼­ °è»êµÈ °ñµå°ªÀ» ºÒ·¯¿Í¾ß ÇÑ´Ù.
-        _goldText.text = "°ñµå: " + goldAmount.ToString();
+        _goldText.text = "ê³¨ë“œ: " + goldAmount.ToString();
     }
 
 }
