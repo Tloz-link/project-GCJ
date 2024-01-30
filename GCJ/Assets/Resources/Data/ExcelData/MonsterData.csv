@@ -1,0 +1,4 @@
+DataId,DescriptionTextID,MaxHp,Atk,AtkRange,MoveSpeed,AnimatorDataID
+1101,경비원1,4,1,0,0.8,Animations/Monster/security1
+1102,경비원2,4,1,0,0.8,Animations/Monster/security2
+1103,경비원3,4,1,0,0.8,Animations/Monster/security3

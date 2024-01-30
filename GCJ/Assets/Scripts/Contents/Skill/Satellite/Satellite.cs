@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Satellite : MonoBehaviour
 {
-    private int attack = 2;
+    //private int attack = 2;
 
     void Update()
     {
@@ -16,7 +16,7 @@ public class Satellite : MonoBehaviour
         if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
-            monster.Damaged(attack);
+            monster.OnDamaged(Managers.Object.Hero);
         }
     }
 }

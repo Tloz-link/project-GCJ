@@ -22,7 +22,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     #endregion
 
-    public T Spawn<T>(Vector3 position) where T : BaseObject
+    public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
     {
         string prefabName = typeof(T).Name;
 
@@ -48,6 +48,8 @@ public class ObjectManager
                     Monsters.Add(monster);
                     break;
             }
+
+            creature.SetInfo(templateID);
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
@@ -128,7 +130,7 @@ public class ObjectManager
             }
 
             float distance = Vector2.Distance(position, monster.transform.position);
-            if (distance > 5f)
+            if (distance > Hero.AtkRange)
             {
                 continue;
             }

@@ -9,9 +9,12 @@ public class BaseObject : InitBase
     public CircleCollider2D Collider { get; private set; }
     public Animator Animator { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
+    public SpriteRenderer Renderer { get; protected set; }
 
     public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
     public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
+
+    public int DataTemplateID { get; set; }
 
     bool _lookLeft = true;
     public bool LookLeft

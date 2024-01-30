@@ -22,7 +22,7 @@ public class Rocket : Projectile
             List<Monster> monsters = Managers.Object.FindMonsterByRange(transform.position, 1.2f);
             foreach (Monster monster in monsters)
             {
-                monster.Damaged(attack);
+                monster.OnDamaged(Managers.Object.Hero);
             }
             Managers.Resource.Instantiate("Area/Circle").GetOrAddComponent<Area>().SetInfo(transform.position, 0.5f);
 

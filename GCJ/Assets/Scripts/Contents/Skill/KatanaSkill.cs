@@ -52,7 +52,7 @@ public class KatanaSkill : Skill
         if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
-            monster.Damaged(Attack);
+            monster.OnDamaged(Managers.Object.Hero);
         }
     }
 }

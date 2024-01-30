@@ -81,4 +81,18 @@ public static class Define
         Obstacle = 9,
         Projectile = 10,
     }
+
+    public const int HERO_ZOOKEEPER_ID = 201000;
+
+    public const int MONSTER_SECURITY1_ID = 1101;
+    public const int MONSTER_SECURITY2_ID = 1102;
+    public const int MONSTER_SECURITY3_ID = 1103;
+}
+
+public static class SortingLayers
+{
+    public const int ENV = 100;
+    public const int MONSTER = 100;
+    public const int HERO = 100;
+    public const int PROJECTILE = 200;
 }

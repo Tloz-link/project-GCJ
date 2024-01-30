@@ -1,0 +1,13 @@
+{
+  "heroes": [
+    {
+      "DataId": 201000,
+      "DescriptionTextID": "사육사",
+      "MaxHp": 5,
+      "Atk": 2,
+      "AtkRange": 5.0,
+      "MoveSpeed": 3.0,
+      "AnimatorDataID": "Animations/Hero/hero"
+    }
+  ]
+}

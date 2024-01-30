@@ -31,16 +31,20 @@ public class Projectile : MonoBehaviour
     private bool isCollided = false;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
-        {
-            if (isCollided)
-                return;
+        BaseObject target = other.GetComponent<BaseObject>();
+        if (target.IsValid() == false)
+            return;
 
-            Monster monster = other.gameObject.GetComponent<Monster>();
-            monster.Damaged(attack);
+        Creature creature = target as Creature;
+        if (creature.CreatureType != Define.ECreatureType.Monster)
+            return;
 
-            Managers.Resource.Destroy(gameObject);
-            isCollided = true;
-        }
+        if (isCollided)
+            return;
+
+        creature.OnDamaged(Managers.Object.Hero);
+
+        Managers.Resource.Destroy(gameObject);
+        isCollided = true;
     }
 }

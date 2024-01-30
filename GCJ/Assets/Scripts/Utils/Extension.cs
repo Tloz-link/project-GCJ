@@ -17,9 +17,21 @@ public static class Extension
     }
 
     public static bool IsValid(this GameObject go)
-	{
-		return go != null && go.activeSelf;
-	}
+    {
+        return go != null && go.activeSelf;
+    }
+
+    public static bool IsValid(this BaseObject bo)
+    {
+        if (bo == null || bo.isActiveAndEnabled == false)
+            return false;
+
+        Creature creature = bo as Creature;
+        if (creature != null)
+            return creature.CreatureState != Define.ECreatureState.Dead;
+
+        return true;
+    }
 
     public static void DestroyChilds(this GameObject go)
     {

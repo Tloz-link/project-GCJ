@@ -26,19 +26,16 @@ public class Hero : Creature
         BindObject(typeof(GameObjects));
 
         CreatureType = ECreatureType.Hero;
-        CreatureState = ECreatureState.Idle;
-        Hp = 5;
-        Speed = 2.0f;
 
         Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
-        //{
-        //    KunaiSkill kunai = new KunaiSkill();
-        //    _skills.Add(kunai);
-        //}
+        {
+            KunaiSkill kunai = new KunaiSkill();
+            _skills.Add(kunai);
+        }
 
         //{
         //    RocketSkill rocket = new RocketSkill();
@@ -56,6 +53,16 @@ public class Hero : Creature
         //}
 
         return true;
+    }
+
+    public override void SetInfo(int templateID)
+    {
+        base.SetInfo(templateID);
+
+        CreatureState = ECreatureState.Idle;
+
+        Renderer = _childs[(int)GameObjects.Sprite].GetComponent<SpriteRenderer>();
+        Renderer.sortingOrder = SortingLayers.HERO;
     }
 
     public void BindObject(Type type)
@@ -82,17 +89,15 @@ public class Hero : Creature
 
     void Update()
     {
-        transform.TranslateEx(_moveDir * Time.deltaTime * Speed);
+        if (IsValid(this) == false)
+            return;
+
+        transform.TranslateEx(_moveDir * Time.deltaTime * MoveSpeed);
 
         foreach (Skill skill in _skills)
         {
             skill.Update();
         }
-    }
-
-    protected override void PlayAnimation(Define.ECreatureState state)
-    {
-        Animator.SetInteger("state", (int)state);
     }
 
     private void HandleOnMoveDirChanged(Vector2 dir)

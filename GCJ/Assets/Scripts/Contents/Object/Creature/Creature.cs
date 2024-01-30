@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public class Creature : BaseObject
 {
-    public int Hp { get; protected set; } = 5;
-    public int Attack { get; protected set; } = 2;
-    public float Speed { get; protected set; } = 1.0f;
-
+    public Data.CreatureData CreatureData { get; private set; }
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
+
+    #region Stats
+    public int Hp { get; set; }
+    public int MaxHp { get; set; }
+    public int Atk { get; set; }
+    public float AtkRange { get; set; }
+    public float MoveSpeed { get; set; }
+    #endregion
 
     protected bool _freezeStateOneFrame = false;
     protected ECreatureState _creatureState = ECreatureState.None;
@@ -35,13 +42,40 @@ public class Creature : BaseObject
             return false;
 
         ObjectType = EObjectType.Creature;
-        CreatureState = ECreatureState.Idle;
         return true;
+    }
+
+    public virtual void SetInfo(int templateID)
+    {
+        DataTemplateID = templateID;
+
+        if (CreatureType == ECreatureType.Hero)
+            CreatureData = Managers.Data.HeroDic[templateID];
+        else
+            CreatureData = Managers.Data.MonsterDic[templateID];
+
+        gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
+
+        AnimatorController animatorController = Managers.Resource.Load<AnimatorController>(CreatureData.AnimatorDataID);
+        Animator.runtimeAnimatorController = animatorController;
+
+        MaxHp = CreatureData.MaxHp;
+        Hp = CreatureData.MaxHp;
+        Atk = CreatureData.Atk;
+        AtkRange = CreatureData.AtkRange;
+        MoveSpeed = CreatureData.MoveSpeed;
+
+        CreatureState = ECreatureState.Idle;
     }
 
     private void LateUpdate()
     {
         _freezeStateOneFrame = false;
+    }
+
+    protected override void PlayAnimation(Define.ECreatureState state)
+    {
+        Animator.SetInteger("state", (int)state);
     }
 
     #region AI
@@ -89,12 +123,16 @@ public class Creature : BaseObject
     {
         base.OnDamaged(attacker);
 
+        if (attacker.IsValid() == false)
+            return;
+
         Creature creature = attacker as Creature;
         if (creature == null)
             return;
 
-        Hp -= creature.Attack;
-        Debug.Log("Current Hp : " + Hp);
+        int finalDamage = creature.Atk;
+        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+        Debug.Log(gameObject.name + " Current Hp : " + Hp);
 
         if (Hp <= 0)
         {
@@ -114,26 +152,10 @@ public class Creature : BaseObject
     }
     #endregion
 
-    #region Wait
-    protected Coroutine _coWait;
-
-    protected void StartWait(float seconds)
+    #region Misc
+    protected bool IsValid(BaseObject bo)
     {
-        CancelWait();
-        _coWait = StartCoroutine(CoWait(seconds));
-    }
-
-    IEnumerator CoWait(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        _coWait = null;
-    }
-
-    protected void CancelWait()
-    {
-        if (_coWait != null)
-            StopCoroutine(_coWait);
-        _coWait = null;
+        return bo.IsValid();
     }
     #endregion
 }

@@ -12,37 +12,38 @@ public class Monster : Creature
             return false;
 
         CreatureType = ECreatureType.Monster;
-        CreatureState = ECreatureState.Idle;
-        Collider.excludeLayers = ~(1 << (int)Define.ELayer.Hero);
-        Collider.includeLayers = (1 << (int)Define.ELayer.Hero);
-
-        Speed = 3.0f;
-        Hp = 3;
-        Attack = 2;
 
         _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
-        _agent.radius = 0.2f;
-        _agent.speed = 1f;
+        _agent.radius = 0.35f;
 
         StartCoroutine(CoUpdateAI());
 
         return true;
     }
 
-    public void Damaged(int damage)
+    public override void SetInfo(int templateID)
     {
-        Hp -= damage;
-        if (Hp <= 0)
-        {
-            Managers.Object.Despawn<Monster>(this);
-        }
+        base.SetInfo(templateID);
+
+        CreatureState = ECreatureState.Move;
+
+        Renderer = GetComponent<SpriteRenderer>();
+        Renderer.sortingOrder = SortingLayers.MONSTER;
+
+        _agent.speed = MoveSpeed * 2;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         BaseObject target = other.GetComponent<BaseObject>();
+        if (target.IsValid() == false)
+            return;
+
+        Creature creature = target as Creature;
+        if (creature.CreatureType != Define.ECreatureType.Hero)
+            return;
 
         // TODO
         target.OnDamaged(this);
@@ -51,12 +52,16 @@ public class Monster : Creature
     #region Battle
     public override void OnDamaged(BaseObject attacker)
     {
-
+        base.OnDamaged(attacker);
     }
 
     public override void OnDead(BaseObject attacker)
     {
         base.OnDead(attacker);
+
+        // Drop Item
+
+        Managers.Object.Despawn(this);
     }
     #endregion
 
@@ -64,12 +69,25 @@ public class Monster : Creature
     private NavMeshAgent _agent;
     private Transform _target;
 
-    protected override void UpdateIdle()
+    protected override void UpdateMove()
     {
         _target = Managers.Object.Hero?.transform;
 
         if (_target != null)
+        {
             _agent.SetDestination(_target.position);
+
+            Vector2 dir = _agent.desiredVelocity;
+            if (dir.x < 0)
+                LookLeft = true;
+            else if (dir.x > 0)
+                LookLeft = false;
+        }
+    }
+
+    protected override void UpdateHit()
+    {
+        CreatureState = ECreatureState.Move;
     }
     #endregion
 }
