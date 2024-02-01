@@ -2,30 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KatanaSkill : Skill
-{    
-    private Transform parent;
-    private float angleRange = 90;
-
-    public KatanaSkill(Transform parent) : base(1, 2.0f, Define.ESkillType.Katana)
+public class KatanaSkill : SkillBase
+{
+    public override bool Init()
     {
-        this.parent = parent;
+        if (base.Init() == false)
+            return false;
+
+        return true;
     }
 
-    public override void Update()
+    public override void SetInfo(Creature owner, int skillTemplateID)
     {
-        cooldownTick += Time.deltaTime;
-        if (cooldownTick <= Cooldown)
-            return;
-        cooldownTick = 0.0f;
-
-        PlaySkill();
+        base.SetInfo(owner, skillTemplateID);
     }
 
-    private void PlaySkill()
+    public override void DoSkill()
     {
         Hero hero = Managers.Object.Hero;
-        Area katana = Managers.Resource.Instantiate("Area/Quarter", parent).GetOrAddComponent<Area>();
+        Area katana = Managers.Resource.Instantiate("Area/Quarter", transform).GetOrAddComponent<Area>();
         katana.SetInfo(hero.transform.position, 0.2f);
 
         float angle = Mathf.Atan2(hero.Direction.y, hero.Direction.x) * Mathf.Rad2Deg;
@@ -40,19 +35,19 @@ public class KatanaSkill : Skill
             Vector2 directionToTarget = (hitCollider.transform.position - katana.transform.position).normalized;
             float angleToTarget = Vector2.Angle(hero.Direction, directionToTarget);
 
-            if (angleToTarget < angleRange / 2)
+            if (angleToTarget < SkillData.AngleRange / 2)
             {
-                OnTriggerEnter(hitCollider);
+                CheckEnemyInRange(hitCollider);
             }
         }
     }
 
-    private void OnTriggerEnter(Collider2D other)
+    private void CheckEnemyInRange(Collider2D other)
     {
         if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
-            monster.OnDamaged(Managers.Object.Hero);
+            monster.OnDamaged(Owner, this);
         }
     }
 }

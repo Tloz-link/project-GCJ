@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketSkill : Skill
+public class RocketSkill : SkillBase
 {
-    public RocketSkill() : base(3, 4.0f, Define.ESkillType.Rocket)
+    public override bool Init()
     {
+        if (base.Init() == false)
+            return false;
+
+        return true;
     }
 
-    public override void Update()
+    public override void SetInfo(Creature owner, int skillTemplateID)
     {
-        cooldownTick += Time.deltaTime;
-        if (cooldownTick <= Cooldown)
-            return;
-        cooldownTick = 0.0f;
+        base.SetInfo(owner, skillTemplateID);
+    }
 
-        Rocket rocket = Managers.Resource.Instantiate("Projectile/Rocket").GetOrAddComponent<Rocket>();
-        Hero hero = Managers.Object.Hero;
-        rocket.SetInfo(Attack, hero.transform.position, hero.Direction);
+    public override void DoSkill()
+    {
+        Rocket rocket = Managers.Object.Spawn<Rocket>(Owner.transform.position, SkillData.ProjectileId);
+        rocket.SetSpawnInfo(Owner, this, Owner.Direction);
     }
 }

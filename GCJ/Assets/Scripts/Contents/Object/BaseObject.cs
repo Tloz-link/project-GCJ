@@ -32,9 +32,10 @@ public class BaseObject : InitBase
         if (base.Init() == false)
             return false;
 
-        Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
-        Animator = gameObject.GetComponentInChildren<Animator>();
-        RigidBody = GetComponent<Rigidbody2D>();
+        Collider = gameObject.GetComponent<CircleCollider2D>();
+        Animator = gameObject.GetComponent<Animator>();
+        RigidBody = gameObject.GetComponent<Rigidbody2D>();
+        Renderer = gameObject.GetComponent<SpriteRenderer>();
 
         return true;
     }
@@ -50,12 +51,12 @@ public class BaseObject : InitBase
     }
 
     #region Battle
-    public virtual void OnDamaged(BaseObject attacker)
+    public virtual void OnDamaged(BaseObject attacker, SkillBase skill)
     {
 
     }
 
-    public virtual void OnDead(BaseObject attacker)
+    public virtual void OnDead(BaseObject attacker, SkillBase skill)
     {
 
     }
@@ -67,11 +68,12 @@ public class BaseObject : InitBase
 
     }
 
-    protected virtual void Flip(bool flag)
+    protected void Flip(bool flag)
     {
-        Vector3 scale = transform.localScale;
-        scale.x = flag ? -1 : 1;
-        transform.localScale = scale;
+        if (Renderer == null)
+            return;
+
+        Renderer.flipX = flag;
     }
     #endregion
 }

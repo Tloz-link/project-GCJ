@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6667636869117813595}
   - component: {fileID: 345006918570857207}
   - component: {fileID: 3968058067561610122}
-  m_Layer: 0
-  m_Name: Projectile
+  - component: {fileID: -5661598137968002930}
+  m_Layer: 10
+  m_Name: Kunai
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,3 +131,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5014801, y: 2.785831}
   m_EdgeRadius: 0
+--- !u!114 &-5661598137968002930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927016374451658559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba030095d213f374298188678b189719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class Rocket : Projectile
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private bool isCollided = false;
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -22,11 +16,11 @@ public class Rocket : Projectile
             List<Monster> monsters = Managers.Object.FindMonsterByRange(transform.position, 1.2f);
             foreach (Monster monster in monsters)
             {
-                monster.OnDamaged(Managers.Object.Hero);
+                monster.OnDamaged(Owner, Skill);
             }
             Managers.Resource.Instantiate("Area/Circle").GetOrAddComponent<Area>().SetInfo(transform.position, 0.5f);
 
-            Managers.Resource.Destroy(gameObject);
+            Managers.Object.Despawn(this);
             isCollided = true;
         }
     }

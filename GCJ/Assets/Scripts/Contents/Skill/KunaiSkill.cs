@@ -1,24 +1,28 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KunaiSkill : Skill
+public class KunaiSkill : SkillBase
 {
-    public KunaiSkill() : base(1, 2.0f, Define.ESkillType.Kunai)
+    public override bool Init()
     {
+        if (base.Init() == false)
+            return false;
+
+        return true;
     }
 
-    public override void Update()
+    public override void SetInfo(Creature owner, int skillTemplateID)
     {
-        cooldownTick += Time.deltaTime;
-        if (cooldownTick <= Cooldown)
-            return;
-        cooldownTick = 0.0f;
+        base.SetInfo(owner, skillTemplateID);
+    }
 
+    public override void DoSkill()
+    {
         Vector2 direction = Vector2.zero;
-        Hero hero = Managers.Object.Hero;
-        Monster target = Managers.Object.FindClosestMonster(hero.transform.position);
-
+        
+        Monster target = Managers.Object.FindClosestMonster(transform.position);
         if (target == null)
         {
             float randomAngle = Random.Range(0f, 360f);
@@ -27,10 +31,10 @@ public class KunaiSkill : Skill
         }
         else
         {
-            direction = target.transform.position - hero.transform.position;
+            direction = target.transform.position - transform.position;
         }
 
-        Projectile proj = Managers.Resource.Instantiate("Projectile/Projectile").GetOrAddComponent<Projectile>();
-        proj.SetInfo(Attack, hero.transform.position, direction.normalized);
+        Kunai proj = Managers.Object.Spawn<Kunai>(Owner.transform.position, SkillData.ProjectileId);
+        proj.SetSpawnInfo(Owner, this, direction);
     }
 }

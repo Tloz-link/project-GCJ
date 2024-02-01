@@ -58,4 +58,60 @@ namespace Data
         }
     }
     #endregion
+
+    #region SkillData
+    [Serializable]
+    public class SkillData
+    {
+        public int DataId;
+        public string Name;
+        public string ClassName;
+        public int ProjectileId;
+        public float CoolTime;
+        public int Atk;
+        public int NumProjectiles;
+        public float AngleRange;
+        public float Duration;
+    }
+
+    [Serializable]
+    public class SkillDataLoader : ILoader<int, SkillData>
+    {
+        public List<SkillData> skills = new List<SkillData>();
+
+        public Dictionary<int, SkillData> MakeDict()
+        {
+            Dictionary<int, SkillData> dict = new Dictionary<int, SkillData>();
+            foreach (SkillData skill in skills)
+                dict.Add(skill.DataId, skill);
+            return dict;
+        }
+    }
+    #endregion
+
+    #region ProjectileData
+    [Serializable]
+    public class ProjectileData
+    {
+        public int DataId;
+        public string Name;
+        public string ClassName;
+        public float ProjSpeed;
+    }
+
+    [Serializable]
+    public class ProjectileDataLoader : ILoader<int, ProjectileData>
+    {
+        public List<ProjectileData> projectiles = new List<ProjectileData>();
+
+        public Dictionary<int, ProjectileData> MakeDict()
+        {
+            Dictionary<int, ProjectileData> dict = new Dictionary<int, ProjectileData>();
+            foreach (ProjectileData projectile in projectiles)
+                dict.Add(projectile.DataId, projectile);
+            return dict;
+        }
+    }
+    #endregion
+
 }

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Satellite : MonoBehaviour
+public class Bird : Projectile
 {
-    //private int attack = 2;
-
     void Update()
     {
 
@@ -16,7 +14,7 @@ public class Satellite : MonoBehaviour
         if (((1 << (int)Define.ELayer.Monster) & (1 << other.gameObject.layer)) != 0)
         {
             Monster monster = other.gameObject.GetComponent<Monster>();
-            monster.OnDamaged(Managers.Object.Hero);
+            monster.OnDamaged(Owner, Skill);
         }
     }
 }

@@ -29,9 +29,7 @@ public class Monster : Creature
 
         CreatureState = ECreatureState.Move;
 
-        Renderer = GetComponent<SpriteRenderer>();
         Renderer.sortingOrder = SortingLayers.MONSTER;
-
         _agent.speed = MoveSpeed * 2;
     }
 
@@ -42,22 +40,22 @@ public class Monster : Creature
             return;
 
         Creature creature = target as Creature;
-        if (creature.CreatureType != Define.ECreatureType.Hero)
+        if (creature == null || creature.CreatureType != Define.ECreatureType.Hero)
             return;
 
         // TODO
-        target.OnDamaged(this);
+        target.OnDamaged(this, null);
     }
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
+        base.OnDead(attacker, skill);
 
         // Drop Item
 

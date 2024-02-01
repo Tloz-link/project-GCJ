@@ -1,0 +1,28 @@
+{
+  "projectiles": [
+    {
+      "DataId": 101,
+      "Name": "마취 총알",
+      "ClassName": null,
+      "ProjSpeed": 5.0
+    },
+    {
+      "DataId": 102,
+      "Name": "쿠나이",
+      "ClassName": "Kunai",
+      "ProjSpeed": 5.0
+    },
+    {
+      "DataId": 103,
+      "Name": "로켓",
+      "ClassName": "Rocket",
+      "ProjSpeed": 5.0
+    },
+    {
+      "DataId": 104,
+      "Name": "앵무새",
+      "ClassName": "Bird",
+      "ProjSpeed": 5.0
+    }
+  ]
+}

@@ -7,6 +7,8 @@ using static Define;
 
 public class Creature : BaseObject
 {
+    public Vector2 Direction { get; protected set; } = Vector2.up;
+
     public Data.CreatureData CreatureData { get; private set; }
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
@@ -119,9 +121,9 @@ public class Creature : BaseObject
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
 
         if (attacker.IsValid() == false)
             return;
@@ -130,13 +132,13 @@ public class Creature : BaseObject
         if (creature == null)
             return;
 
-        int finalDamage = creature.Atk;
+        int finalDamage = (skill == null) ? creature.Atk : skill.SkillData.Atk;
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
         Debug.Log(gameObject.name + " Current Hp : " + Hp);
 
         if (Hp <= 0)
         {
-            OnDead(attacker);
+            OnDead(attacker, skill);
             CreatureState = ECreatureState.Dead;
         }
         else
@@ -146,9 +148,9 @@ public class Creature : BaseObject
         }
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
+        base.OnDead(attacker, skill);
     }
     #endregion
 

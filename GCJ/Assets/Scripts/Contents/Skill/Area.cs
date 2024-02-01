@@ -19,7 +19,7 @@ public class Area : MonoBehaviour
         tick += Time.deltaTime;
         if (tick > visibleTime)
         {
-            Destroy(gameObject);
+            Managers.Resource.Destroy(gameObject);
         }
     }
 }

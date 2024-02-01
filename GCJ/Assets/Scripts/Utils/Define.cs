@@ -87,6 +87,12 @@ public static class Define
     public const int MONSTER_SECURITY1_ID = 1101;
     public const int MONSTER_SECURITY2_ID = 1102;
     public const int MONSTER_SECURITY3_ID = 1103;
+
+    public const int SKILL_KUNAI_ID = 10001;
+    public const int SKILL_ROCKET_ID = 10002;
+    public const int SKILL_SATELLITE_ID = 10003;
+    public const int SKILL_KATANA_ID = 10004;
+
 }
 
 public static class SortingLayers

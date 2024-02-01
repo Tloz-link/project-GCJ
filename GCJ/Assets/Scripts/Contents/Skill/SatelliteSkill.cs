@@ -1,30 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SatelliteSkill : Skill
+public class SatelliteSkill : SkillBase
 {
-    private Transform parent;
-    private int count;
-    private float durationTime;
-
-    public SatelliteSkill(Transform parent, int count, float durationTime) : base(1, 7.0f, Define.ESkillType.Satellite)
+    public override bool Init()
     {
-        this.parent = parent;
-        this.count = count;
-        this.durationTime = durationTime;
+        if (base.Init() == false)
+            return false;
+
+        return true;
+    }
+
+    public override void SetInfo(Creature owner, int skillTemplateID)
+    {
+        base.SetInfo(owner, skillTemplateID);
     }
 
     private bool isTimeActive = false;
     private float durationTick = 0.0f;
-    public override void Update()
+    protected override void Update()
     {
         if (isTimeActive)
         {
             RotateSatellites();
 
             durationTick += Time.deltaTime;
-            if (durationTick >= durationTime)
+            if (durationTick >= SkillData.Duration)
             {
                 ClearSatellites();
                 durationTick = 0.0f;
@@ -32,34 +35,29 @@ public class SatelliteSkill : Skill
             }
         }
 
-        cooldownTick += Time.deltaTime;
-        if (cooldownTick <= Cooldown)
-            return;
-        cooldownTick = 0.0f;
-
-        CreateSatellites();
-        isTimeActive = true;
+        base.Update();
     }
 
     private float orbitRadius = 1f;
     private float rotationSpeed = 200f;
-    private List<GameObject> satellites = new List<GameObject>();
+    private List<Bird> birds = new List<Bird>();
 
-    private void CreateSatellites()
+    public override void DoSkill()
     {
         ClearSatellites();
 
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < SkillData.NumProjectiles; ++i)
         {
-            float angle = i * 360f / count;
+            float angle = i * 360f / SkillData.NumProjectiles;
             Vector2 spawnPosition = GetCirclePosition(angle, orbitRadius);
 
-            GameObject satellite = Managers.Resource.Instantiate("Satellite/Satellite", parent);
-            satellite.transform.position = spawnPosition;
-            satellite.GetOrAddComponent<Satellite>();
+            Bird bird = Managers.Object.Spawn<Bird>(spawnPosition, SkillData.ProjectileId, transform);
+            bird.SetSpawnInfo(Owner, this, Vector2.up);
 
-            satellites.Add(satellite);
+            birds.Add(bird);
         }
+
+        isTimeActive = true;
     }
 
     private Vector2 GetCirclePosition(float angle, float radius)
@@ -74,20 +72,18 @@ public class SatelliteSkill : Skill
 
     private void RotateSatellites()
     {
-        Transform hero = Managers.Object.Hero.transform;
-
-        foreach (GameObject satellite in satellites)
+        foreach (Bird bird in birds)
         {
-            satellite.transform.RotateAround(hero.position, Vector3.forward, rotationSpeed * Time.deltaTime);
+            bird.transform.RotateAround(Owner.transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
         }
     }
 
     private void ClearSatellites()
     {
-        for (int i = 0; i < satellites.Count; ++i)
+        for (int i = 0; i < birds.Count; ++i)
         {
-            Managers.Resource.Destroy(satellites[i]);
+            Managers.Object.Despawn(birds[i]);
         }
-        satellites.Clear();
+        birds.Clear();
     }
 }

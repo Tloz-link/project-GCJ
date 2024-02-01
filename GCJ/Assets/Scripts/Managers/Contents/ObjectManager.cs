@@ -7,6 +7,7 @@ public class ObjectManager
 {
     public Hero Hero { get; private set; }
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
+    public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
 
     #region Roots
     public Transform GetRootTransform(string name)
@@ -20,9 +21,10 @@ public class ObjectManager
 
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
+    public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     #endregion
 
-    public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
+    public T Spawn<T>(Vector3 position, int templateID, Transform parent = null) where T : BaseObject
     {
         string prefabName = typeof(T).Name;
 
@@ -38,12 +40,12 @@ public class ObjectManager
             switch (creature.CreatureType)
             {
                 case ECreatureType.Hero:
-                    obj.transform.parent = HeroRoot;
+                    obj.transform.parent = (parent == null) ? HeroRoot : parent;
                     Hero hero = creature as Hero;
                     Hero = hero;
                     break;
                 case ECreatureType.Monster:
-                    obj.transform.parent = MonsterRoot;
+                    obj.transform.parent = (parent == null) ? MonsterRoot : parent;
                     Monster monster = creature as Monster;
                     Monsters.Add(monster);
                     break;
@@ -53,7 +55,12 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
-            // TODO
+            obj.transform.parent = (parent == null) ? ProjectileRoot : parent;
+
+            Projectile projectile = go.GetComponent<Projectile>();
+            Projectiles.Add(projectile);
+
+            projectile.SetInfo(templateID);
         }
         else if (obj.ObjectType == EObjectType.Env)
         {
@@ -84,7 +91,8 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
-            // TODO
+            Projectile projectile = obj as Projectile;
+            Projectiles.Remove(projectile);
         }
         else if (obj.ObjectType == EObjectType.Env)
         {

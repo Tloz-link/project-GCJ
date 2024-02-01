@@ -1,0 +1,48 @@
+{
+  "skills": [
+    {
+      "DataId": 10001,
+      "Name": "쿠나이",
+      "ClassName": "KunaiSkill",
+      "ProjectileId": 102,
+      "CoolTime": 2.0,
+      "Atk": 1,
+      "NumProjectiles": 1,
+      "AngleRange": 0.0,
+      "Duration": 0.0
+    },
+    {
+      "DataId": 10002,
+      "Name": "로켓",
+      "ClassName": "RocketSkill",
+      "ProjectileId": 103,
+      "CoolTime": 4.0,
+      "Atk": 3,
+      "NumProjectiles": 1,
+      "AngleRange": 0.0,
+      "Duration": 0.0
+    },
+    {
+      "DataId": 10003,
+      "Name": "앵무새",
+      "ClassName": "SatelliteSkill",
+      "ProjectileId": 104,
+      "CoolTime": 7.0,
+      "Atk": 1,
+      "NumProjectiles": 3,
+      "AngleRange": 0.0,
+      "Duration": 3.0
+    },
+    {
+      "DataId": 10004,
+      "Name": "카타나",
+      "ClassName": "KatanaSkill",
+      "ProjectileId": 0,
+      "CoolTime": 2.0,
+      "Atk": 1,
+      "NumProjectiles": 0,
+      "AngleRange": 90.0,
+      "Duration": 0.0
+    }
+  ]
+}

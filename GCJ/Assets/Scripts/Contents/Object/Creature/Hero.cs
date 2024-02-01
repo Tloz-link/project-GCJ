@@ -2,28 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
 
 public class Hero : Creature
 {
-    public Vector2 Direction { get; private set; } = Vector2.up; 
-    enum GameObjects
-    {
-        Sprite,
-        Satellite
-    }
-
-    private GameObject[] _childs;
-    private List<Skill> _skills = new List<Skill>();
+    private List<SkillBase> _skills = new List<SkillBase>();
     private Vector2 _moveDir = Vector2.zero;
 
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
-
-        BindObject(typeof(GameObjects));
 
         CreatureType = ECreatureType.Hero;
 
@@ -33,24 +24,28 @@ public class Hero : Creature
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
         {
-            KunaiSkill kunai = new KunaiSkill();
-            _skills.Add(kunai);
+            KunaiSkill skill = gameObject.GetOrAddComponent<KunaiSkill>();
+            skill.SetInfo(this, Define.SKILL_KUNAI_ID);
+            _skills.Add(skill);
         }
 
-        //{
-        //    RocketSkill rocket = new RocketSkill();
-        //    _skills.Add(rocket);
-        //}
+        {
+            RocketSkill skill = gameObject.GetOrAddComponent<RocketSkill>();
+            skill.SetInfo(this, Define.SKILL_ROCKET_ID);
+            _skills.Add(skill);
+        }
 
-        //{
-        //    SatelliteSkill satellite = new SatelliteSkill(_childs[(int)GameObjects.Satellite].transform, 3, 3.0f);
-        //    _skills.Add(satellite);
-        //}
+        {
+            SatelliteSkill skill = gameObject.GetOrAddComponent<SatelliteSkill>();
+            skill.SetInfo(this, Define.SKILL_SATELLITE_ID);
+            _skills.Add(skill);
+        }
 
-        //{
-        //    KatanaSkill katana = new KatanaSkill(transform);
-        //    _skills.Add(katana);
-        //}
+        {
+            KatanaSkill skill = gameObject.GetOrAddComponent<KatanaSkill>();
+            skill.SetInfo(this, Define.SKILL_KATANA_ID);
+            _skills.Add(skill);
+        }
 
         return true;
     }
@@ -60,31 +55,7 @@ public class Hero : Creature
         base.SetInfo(templateID);
 
         CreatureState = ECreatureState.Idle;
-
-        Renderer = _childs[(int)GameObjects.Sprite].GetComponent<SpriteRenderer>();
         Renderer.sortingOrder = SortingLayers.HERO;
-    }
-
-    public void BindObject(Type type)
-    {
-        string[] names = Enum.GetNames(type);
-        _childs = new GameObject[names.Length];
-
-        for (int i = 0; i < names.Length; i++)
-        {
-            _childs[i] = Util.FindChild(gameObject, names[i], true);
-            if (_childs[i] == null)
-                Debug.Log($"Failed to bind({names[i]})");
-        }
-    }
-
-    protected override void Flip(bool flag)
-    {
-        Transform sprite = _childs[(int)GameObjects.Sprite].transform;
-
-        Vector3 scale = sprite.localScale;
-        scale.x = flag ? -1 : 1;
-        sprite.localScale = scale;
     }
 
     void Update()
@@ -93,11 +64,6 @@ public class Hero : Creature
             return;
 
         transform.TranslateEx(_moveDir * Time.deltaTime * MoveSpeed);
-
-        foreach (Skill skill in _skills)
-        {
-            skill.Update();
-        }
     }
 
     private void HandleOnMoveDirChanged(Vector2 dir)
@@ -126,14 +92,14 @@ public class Hero : Creature
     }
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
+        base.OnDead(attacker, skill);
 
         _moveDir = Vector2.zero;
         Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
