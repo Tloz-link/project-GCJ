@@ -6,6 +6,12 @@ using static Define;
 
 public class Monster : Creature
 {
+
+    #region Stat
+    public int DropItemID { get; set; }
+    public int DropPersent { get; set; }
+    #endregion
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -31,6 +37,10 @@ public class Monster : Creature
 
         Renderer.sortingOrder = SortingLayers.MONSTER;
         _agent.speed = MoveSpeed;
+
+        Data.MonsterData monsterData = CreatureData as Data.MonsterData;
+        DropItemID = monsterData.DropItemID;
+        DropPersent = monsterData.DropPersent;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -57,7 +67,11 @@ public class Monster : Creature
     {
         base.OnDead(attacker, skill);
 
-        // Drop Item
+        int rand = Random.Range(0, 100);
+        if (rand <= DropPersent)
+        {
+            Managers.Object.Spawn<Item>(transform.position, DropItemID);
+        }
 
         Managers.Object.Despawn(this);
     }

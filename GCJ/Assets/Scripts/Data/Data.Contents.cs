@@ -23,6 +23,8 @@ namespace Data
     [Serializable]
     public class MonsterData : CreatureData
     {
+        public int DropItemID;
+        public int DropPersent;
         public float AtkRange;
     }
 
@@ -146,4 +148,28 @@ namespace Data
     }
     #endregion
 
+    #region ItemData
+    [Serializable]
+    public class ItemData
+    {
+        public int DataId;
+        public string Name;
+        public int Value;
+        public string IconPath;
+    }
+
+    [Serializable]
+    public class ItemDataLoader : ILoader<int, ItemData>
+    {
+        public List<ItemData> items = new List<ItemData>();
+
+        public Dictionary<int, ItemData> MakeDict()
+        {
+            Dictionary<int, ItemData> dict = new Dictionary<int, ItemData>();
+            foreach (ItemData item in items)
+                dict.Add(item.DataId, item);
+            return dict;
+        }
+    }
+    #endregion
 }

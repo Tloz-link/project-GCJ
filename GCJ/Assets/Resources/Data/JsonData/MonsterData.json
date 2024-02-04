@@ -1,6 +1,8 @@
 {
   "monsters": [
     {
+      "DropItemID": 41,
+      "DropPersent": 80,
       "AtkRange": 0.0,
       "DataId": 411,
       "DescriptionTextID": "경비원1",
@@ -11,6 +13,8 @@
       "AnimatorDataID": "Animations/Monster/security1"
     },
     {
+      "DropItemID": 42,
+      "DropPersent": 80,
       "AtkRange": 0.0,
       "DataId": 412,
       "DescriptionTextID": "경비원2",
@@ -21,6 +25,8 @@
       "AnimatorDataID": "Animations/Monster/security2"
     },
     {
+      "DropItemID": 43,
+      "DropPersent": 80,
       "AtkRange": 0.0,
       "DataId": 413,
       "DescriptionTextID": "경비원3",

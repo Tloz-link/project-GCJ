@@ -39,6 +39,7 @@ public static class Define
         Creature,
         Projectile,
         Env,
+        Item,
     }
 
     public enum ECreatureType
@@ -92,6 +93,7 @@ public static class Define
 
 public static class SortingLayers
 {
+    public const int ITEM = 50;
     public const int ENV = 100;
     public const int MONSTER = 100;
     public const int HERO = 100;

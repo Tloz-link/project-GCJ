@@ -8,16 +8,12 @@ public class Projectile : BaseObject
     public SkillBase Skill { get; private set; }
     public Data.ProjectileData ProjectileData { get; private set; }
 
-    private SpriteRenderer _spriteRenderer;
-
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
         ObjectType = Define.EObjectType.Projectile;
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sortingOrder = SortingLayers.PROJECTILE;
 
         return true;
     }
@@ -25,6 +21,7 @@ public class Projectile : BaseObject
     public void SetInfo(int dataTemplateID)
     {
         ProjectileData = Managers.Data.ProjectileDic[dataTemplateID];
+        Renderer.sortingOrder = SortingLayers.PROJECTILE;
     }
 
     public void SetSpawnInfo(Creature owner, SkillBase skill, Vector2 direction)

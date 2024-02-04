@@ -6,7 +6,7 @@
       "ClassName": "KunaiSkill",
       "ProjectileId": 102,
       "CoolTime": 2.0,
-      "Atk": 1,
+      "Atk": 10,
       "NumProjectiles": 1,
       "AngleRange": 0.0,
       "Duration": 0.0

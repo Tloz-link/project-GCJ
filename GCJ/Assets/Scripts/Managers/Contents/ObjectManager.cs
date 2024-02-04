@@ -8,6 +8,7 @@ public class ObjectManager
     public Hero Hero { get; private set; }
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
+    public HashSet<Item> Items { get; } = new HashSet<Item>();
 
     #region Roots
     public Transform GetRootTransform(string name)
@@ -22,6 +23,7 @@ public class ObjectManager
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
+    public Transform ItemRoot { get { return GetRootTransform("@Item"); } }
     #endregion
 
     public T Spawn<T>(Vector3 position, int templateID, Transform parent = null) where T : BaseObject
@@ -62,9 +64,14 @@ public class ObjectManager
 
             projectile.SetInfo(templateID);
         }
-        else if (obj.ObjectType == EObjectType.Env)
+        else if (obj.ObjectType == EObjectType.Item)
         {
-            // TODO
+            obj.transform.parent = (parent == null) ? ItemRoot : parent;
+
+            Item item = go.GetComponent<Item>();
+            Items.Add(item);
+
+            item.SetInfo(templateID);
         }
 
         return obj as T;
@@ -94,9 +101,10 @@ public class ObjectManager
             Projectile projectile = obj as Projectile;
             Projectiles.Remove(projectile);
         }
-        else if (obj.ObjectType == EObjectType.Env)
+        else if (obj.ObjectType == EObjectType.Item)
         {
-            // TODO
+            Item item = obj as Item;
+            Items.Remove(item);
         }
 
         Managers.Resource.Destroy(obj.gameObject);
