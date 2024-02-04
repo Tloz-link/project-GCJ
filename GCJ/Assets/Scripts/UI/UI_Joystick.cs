@@ -32,9 +32,6 @@ public class UI_Joystick : UI_Base
         gameObject.BindEvent(OnPointerDown, type: Define.EUIEvent.PointerDown);
         gameObject.BindEvent(OnPointerUp, type: Define.EUIEvent.PointerUp);
         gameObject.BindEvent(OnDrag, type: Define.EUIEvent.Drag);
-
-        Managers.Game.JoystickUI = GameObject.Find("UI_Joystick");
-
         return true;
     }
 

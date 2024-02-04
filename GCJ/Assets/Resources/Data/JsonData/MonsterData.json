@@ -1,30 +1,33 @@
 {
   "monsters": [
     {
-      "DataId": 1101,
-      "DescriptionTextID": "경비원1",
-      "MaxHp": 4,
-      "Atk": 1,
       "AtkRange": 0.0,
-      "MoveSpeed": 0.8,
+      "DataId": 411,
+      "DescriptionTextID": "경비원1",
+      "MaxHp": 20,
+      "Atk": 3,
+      "MoveSpeed": 70.0,
+      "ResistDisorder": 0.0,
       "AnimatorDataID": "Animations/Monster/security1"
     },
     {
-      "DataId": 1102,
-      "DescriptionTextID": "경비원2",
-      "MaxHp": 4,
-      "Atk": 1,
       "AtkRange": 0.0,
-      "MoveSpeed": 0.8,
+      "DataId": 412,
+      "DescriptionTextID": "경비원2",
+      "MaxHp": 40,
+      "Atk": 5,
+      "MoveSpeed": 75.0,
+      "ResistDisorder": 0.0,
       "AnimatorDataID": "Animations/Monster/security2"
     },
     {
-      "DataId": 1103,
-      "DescriptionTextID": "경비원3",
-      "MaxHp": 4,
-      "Atk": 1,
       "AtkRange": 0.0,
-      "MoveSpeed": 0.8,
+      "DataId": 413,
+      "DescriptionTextID": "경비원3",
+      "MaxHp": 60,
+      "Atk": 7,
+      "MoveSpeed": 80.0,
+      "ResistDisorder": 0.0,
       "AnimatorDataID": "Animations/Monster/security3"
     }
   ]

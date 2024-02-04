@@ -43,15 +43,15 @@ public class ObjectManager
                     obj.transform.parent = (parent == null) ? HeroRoot : parent;
                     Hero hero = creature as Hero;
                     Hero = hero;
+                    hero.SetInfo(templateID);
                     break;
                 case ECreatureType.Monster:
                     obj.transform.parent = (parent == null) ? MonsterRoot : parent;
                     Monster monster = creature as Monster;
                     Monsters.Add(monster);
+                    monster.SetInfo(templateID);
                     break;
             }
-
-            creature.SetInfo(templateID);
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
@@ -125,7 +125,7 @@ public class ObjectManager
         return list;
     }
 
-    public Monster FindClosestMonster(Vector2 position)
+    public Monster FindClosestMonster(Vector2 position, float range)
     {
         Monster closestMonster = null;
         float closestDistance = Mathf.Infinity;
@@ -138,7 +138,7 @@ public class ObjectManager
             }
 
             float distance = Vector2.Distance(position, monster.transform.position);
-            if (distance > Hero.AtkRange)
+            if (distance > range)
             {
                 continue;
             }

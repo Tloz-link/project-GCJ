@@ -59,14 +59,6 @@ public static class Define
         Dead = 5,
     }
 
-    public enum ESkillType
-    {
-        Kunai,
-        Satellite,
-        Katana,
-        Rocket
-    }
-
     public enum ELayer
     {
         Default = 0,
@@ -82,11 +74,14 @@ public static class Define
         Projectile = 10,
     }
 
-    public const int HERO_ZOOKEEPER_ID = 201000;
+    public const float DEFAULT_SPEED = 3;
+    public const int MAX_LEVEL = 60;
 
-    public const int MONSTER_SECURITY1_ID = 1101;
-    public const int MONSTER_SECURITY2_ID = 1102;
-    public const int MONSTER_SECURITY3_ID = 1103;
+    public const int HERO_ZOOKEEPER_ID = 100;
+
+    public const int MONSTER_SECURITY1_ID = 411;
+    public const int MONSTER_SECURITY2_ID = 412;
+    public const int MONSTER_SECURITY3_ID = 413;
 
     public const int SKILL_KUNAI_ID = 10001;
     public const int SKILL_ROCKET_ID = 10002;

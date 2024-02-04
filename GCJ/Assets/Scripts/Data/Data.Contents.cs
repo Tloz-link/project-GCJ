@@ -13,8 +13,8 @@ namespace Data
         public string DescriptionTextID;
         public int MaxHp;
         public int Atk;
-        public float AtkRange;
         public float MoveSpeed;
+        public float ResistDisorder;
         public string AnimatorDataID;
     }
     #endregion
@@ -23,6 +23,7 @@ namespace Data
     [Serializable]
     public class MonsterData : CreatureData
     {
+        public float AtkRange;
     }
 
     [Serializable]
@@ -43,6 +44,9 @@ namespace Data
     [Serializable]
     public class HeroData : CreatureData
     {
+        public int Level;
+        public int MaxExp;
+        public float ItemAcquireRange;
     }
 
     [Serializable]
@@ -54,6 +58,34 @@ namespace Data
             Dictionary<int, HeroData> dict = new Dictionary<int, HeroData>();
             foreach (HeroData hero in heroes)
                 dict.Add(hero.DataId, hero);
+            return dict;
+        }
+    }
+    #endregion
+
+    #region HeroLevelData
+    [Serializable]
+    public class HeroLevelData
+    {
+        public int DataId;
+        public int Level;
+        public int Exp;
+        public float MoveSpeed;
+        public int MaxHp;
+        public float ItemAcquireRange;
+        public int ResistDisorder;
+    }
+
+    [Serializable]
+    public class HeroLevelDataLoader : ILoader<int, HeroLevelData>
+    {
+        public List<HeroLevelData> levels = new List<HeroLevelData>();
+
+        public Dictionary<int, HeroLevelData> MakeDict()
+        {
+            Dictionary<int, HeroLevelData> dict = new Dictionary<int, HeroLevelData>();
+            foreach (HeroLevelData level in levels)
+                dict.Add(level.DataId, level);
             return dict;
         }
     }

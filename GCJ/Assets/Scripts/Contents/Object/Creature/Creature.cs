@@ -13,10 +13,10 @@ public class Creature : BaseObject
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
     #region Stats
+    public int DataID { get; set; }
     public int Hp { get; set; }
     public int MaxHp { get; set; }
     public int Atk { get; set; }
-    public float AtkRange { get; set; }
     public float MoveSpeed { get; set; }
     #endregion
 
@@ -61,11 +61,11 @@ public class Creature : BaseObject
         AnimatorController animatorController = Managers.Resource.Load<AnimatorController>(CreatureData.AnimatorDataID);
         Animator.runtimeAnimatorController = animatorController;
 
+        DataID = CreatureData.DataId;
         MaxHp = CreatureData.MaxHp;
         Hp = CreatureData.MaxHp;
         Atk = CreatureData.Atk;
-        AtkRange = CreatureData.AtkRange;
-        MoveSpeed = CreatureData.MoveSpeed;
+        MoveSpeed = (CreatureData.MoveSpeed / 100.0f) * Define.DEFAULT_SPEED;
 
         CreatureState = ECreatureState.Idle;
     }
@@ -134,7 +134,6 @@ public class Creature : BaseObject
 
         int finalDamage = (skill == null) ? creature.Atk : skill.SkillData.Atk;
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
-        Debug.Log(gameObject.name + " Current Hp : " + Hp);
 
         if (Hp <= 0)
         {
@@ -144,8 +143,9 @@ public class Creature : BaseObject
         else
         {
             CreatureState = ECreatureState.Hit;
-            _freezeStateOneFrame = true;
         }
+
+        _freezeStateOneFrame = true;
     }
 
     public override void OnDead(BaseObject attacker, SkillBase skill)

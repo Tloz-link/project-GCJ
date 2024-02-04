@@ -1,3 +1,4 @@
+using Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,29 @@ public class Hero : Creature
 {
     private List<SkillBase> _skills = new List<SkillBase>();
     private Vector2 _moveDir = Vector2.zero;
+
+    #region Stat
+    public int Level { get; set; }
+    public int MaxExp { get; set; }
+    public float ItemAcquireRange { get; set; }
+    public float ResistDisorder { get; set; }
+
+    private int _exp = 0;
+    public int Exp
+    {
+        get
+        {
+            return _exp;
+        }
+        set
+        {
+            _exp = value;
+            if (_exp >= MaxExp)
+                LevelUp();
+            Managers.Game.RefreshUI();
+        }
+    }
+    #endregion
 
     public override bool Init()
     {
@@ -29,23 +53,23 @@ public class Hero : Creature
             _skills.Add(skill);
         }
 
-        {
-            RocketSkill skill = gameObject.GetOrAddComponent<RocketSkill>();
-            skill.SetInfo(this, Define.SKILL_ROCKET_ID);
-            _skills.Add(skill);
-        }
+        //{
+        //    RocketSkill skill = gameObject.GetOrAddComponent<RocketSkill>();
+        //    skill.SetInfo(this, Define.SKILL_ROCKET_ID);
+        //    _skills.Add(skill);
+        //}
 
-        {
-            SatelliteSkill skill = gameObject.GetOrAddComponent<SatelliteSkill>();
-            skill.SetInfo(this, Define.SKILL_SATELLITE_ID);
-            _skills.Add(skill);
-        }
+        //{
+        //    SatelliteSkill skill = gameObject.GetOrAddComponent<SatelliteSkill>();
+        //    skill.SetInfo(this, Define.SKILL_SATELLITE_ID);
+        //    _skills.Add(skill);
+        //}
 
-        {
-            KatanaSkill skill = gameObject.GetOrAddComponent<KatanaSkill>();
-            skill.SetInfo(this, Define.SKILL_KATANA_ID);
-            _skills.Add(skill);
-        }
+        //{
+        //    KatanaSkill skill = gameObject.GetOrAddComponent<KatanaSkill>();
+        //    skill.SetInfo(this, Define.SKILL_KATANA_ID);
+        //    _skills.Add(skill);
+        //}
 
         return true;
     }
@@ -56,6 +80,16 @@ public class Hero : Creature
 
         CreatureState = ECreatureState.Idle;
         Renderer.sortingOrder = SortingLayers.HERO;
+
+        Data.HeroData hereData = CreatureData as Data.HeroData;
+
+        Level = hereData.Level;
+        MaxExp = hereData.MaxExp;
+        Exp = 0;
+        ItemAcquireRange = hereData.ItemAcquireRange;
+        ResistDisorder = hereData.ResistDisorder;
+
+        Managers.Game.RefreshUI();
     }
 
     void Update()
@@ -91,10 +125,29 @@ public class Hero : Creature
         }
     }
 
+    private void LevelUp()
+    {
+        if (Level >= Define.MAX_LEVEL)
+            return;
+
+        Level += 1;
+        Data.HeroLevelData heroLevelData = Managers.Data.HeroLevelDic[DataID + Level];
+
+        Exp = 0;
+        MaxHp = heroLevelData.MaxHp;
+        Hp = heroLevelData.MaxHp;
+        MaxExp = heroLevelData.Exp;
+        MoveSpeed = (heroLevelData.MoveSpeed / 100.0f) * Define.DEFAULT_SPEED;
+        ItemAcquireRange = heroLevelData.ItemAcquireRange;
+        ResistDisorder = heroLevelData.ResistDisorder;
+    }
+
     #region Battle
     public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
         base.OnDamaged(attacker, skill);
+
+        Managers.Game.RefreshUI();
     }
 
     public override void OnDead(BaseObject attacker, SkillBase skill)

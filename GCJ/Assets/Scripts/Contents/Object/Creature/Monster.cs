@@ -30,7 +30,7 @@ public class Monster : Creature
         CreatureState = ECreatureState.Move;
 
         Renderer.sortingOrder = SortingLayers.MONSTER;
-        _agent.speed = MoveSpeed * 2;
+        _agent.speed = MoveSpeed;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -65,21 +65,25 @@ public class Monster : Creature
 
     #region AI
     private NavMeshAgent _agent;
-    private Transform _target;
+    private Hero _hero;
 
     protected override void UpdateMove()
     {
-        _target = Managers.Object.Hero?.transform;
+        _hero = Managers.Object.Hero;
 
-        if (_target != null)
+        if (_hero.IsValid())
         {
-            _agent.SetDestination(_target.position);
+            _agent.SetDestination(_hero.transform.position);
 
             Vector2 dir = _agent.desiredVelocity;
             if (dir.x < 0)
                 LookLeft = true;
             else if (dir.x > 0)
                 LookLeft = false;
+        }
+        else
+        {
+            _agent.isStopped = true;
         }
     }
 

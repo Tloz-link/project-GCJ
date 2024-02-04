@@ -22,7 +22,7 @@ public class KunaiSkill : SkillBase
     {
         Vector2 direction = Vector2.zero;
         
-        Monster target = Managers.Object.FindClosestMonster(transform.position);
+        Monster target = Managers.Object.FindClosestMonster(transform.position, 5); // TODO 데이터 시트에서 뽑기
         if (target == null)
         {
             float randomAngle = Random.Range(0f, 360f);

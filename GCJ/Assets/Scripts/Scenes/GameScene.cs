@@ -12,7 +12,10 @@ public class GameScene : BaseScene
 
         SceneType = Define.EScene.GameScene;
 
+        Managers.UI.ShowSceneUI<UI_GameScene>();
+
         Managers.Object.Spawn<Hero>(new Vector3(0f, -4f, 0f), Define.HERO_ZOOKEEPER_ID);
+
         Camera.main.GetOrAddComponent<FollowCamera>();
 
         for (int i = 0; i < 5; ++i)
@@ -25,8 +28,6 @@ public class GameScene : BaseScene
             Managers.Object.Spawn<Monster>(new Vector3(3f, 0f, 0f), Define.MONSTER_SECURITY3_ID);
 
         Managers.UI.ShowBaseUI<UI_Joystick>();
-
-        Managers.UI.ShowSceneUI<UI_GameScene>();
 
         return true;
     }
