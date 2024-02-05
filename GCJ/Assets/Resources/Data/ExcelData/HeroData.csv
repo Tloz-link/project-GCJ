@@ -1,2 +1,2 @@
-Level,MaxExp,ItemAcquireRange,DataId,DescriptionTextID,MaxHp,Atk,MoveSpeed,ResistDisorder,AnimatorDataID
-1,70,0,100,사육사,100,2,100,0,Animations/Hero/hero
+DataId,DescriptionTextID,MaxHp,Atk,MoveSpeed,ResistDisorder,AnimatorDataID,Level,MaxExp,ItemAcquireRange
+100,사육사,100,2,100,0,Animations/Hero/hero,1,70,0
