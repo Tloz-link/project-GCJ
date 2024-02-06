@@ -25,6 +25,9 @@ public abstract class SkillBase : InitBase
     protected float _cooldownTick = 0f;
     protected virtual void Update()
     {
+        if (SkillData.Level == 0)
+            return;
+
         _cooldownTick += Time.deltaTime;
         if (_cooldownTick <= SkillData.CoolTime)
             return;

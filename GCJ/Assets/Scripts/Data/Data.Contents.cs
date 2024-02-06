@@ -49,6 +49,7 @@ namespace Data
         public int Level;
         public int MaxExp;
         public float ItemAcquireRange;
+        public List<int> SkillIdList = new List<int>();
     }
 
     [Serializable]
@@ -100,11 +101,12 @@ namespace Data
         public int DataId;
         public string Name;
         public string ClassName;
+        public int Level;
         public int ProjectileId;
         public float CoolTime;
         public int Atk;
-        public int NumProjectiles;
-        public float AngleRange;
+        public int AtkCount;
+        public float AtkAngle;
         public float Duration;
     }
 

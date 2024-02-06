@@ -35,7 +35,7 @@ public class KatanaSkill : SkillBase
             Vector2 directionToTarget = (hitCollider.transform.position - katana.transform.position).normalized;
             float angleToTarget = Vector2.Angle(hero.Direction, directionToTarget);
 
-            if (angleToTarget < SkillData.AngleRange / 2)
+            if (angleToTarget < 90 / 2)
             {
                 CheckEnemyInRange(hitCollider);
             }

@@ -38,11 +38,4 @@ public static class Extension
         foreach (Transform child in go.transform)
             Managers.Resource.Destroy(child.gameObject);
     }
-
-    public static void TranslateEx(this Transform transform, Vector3 dir)
-    {
-        BaseObject bo = transform.gameObject.GetComponent<BaseObject>();
-        if (bo != null)
-            bo.TranslateEx(dir);
-    }
 }

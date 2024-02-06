@@ -6,7 +6,6 @@ using static Define;
 
 public class Monster : Creature
 {
-
     #region Stat
     public int DropItemID { get; set; }
     public int DropPersent { get; set; }
@@ -18,12 +17,6 @@ public class Monster : Creature
             return false;
 
         CreatureType = ECreatureType.Monster;
-
-        _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
-        _agent.updateRotation = false;
-        _agent.updateUpAxis = false;
-        _agent.radius = 0.35f;
-
         StartCoroutine(CoUpdateAI());
 
         return true;
@@ -36,7 +29,6 @@ public class Monster : Creature
         CreatureState = ECreatureState.Move;
 
         Renderer.sortingOrder = SortingLayers.MONSTER;
-        _agent.speed = MoveSpeed;
 
         Data.MonsterData monsterData = CreatureData as Data.MonsterData;
         DropItemID = monsterData.DropItemID;
@@ -78,7 +70,6 @@ public class Monster : Creature
     #endregion
 
     #region AI
-    private NavMeshAgent _agent;
     private Hero _hero;
 
     protected override void UpdateMove()
@@ -87,18 +78,12 @@ public class Monster : Creature
 
         if (_hero.IsValid())
         {
-            _agent.SetDestination(_hero.transform.position);
+            Vector2 dest = (_hero.transform.position - transform.position).normalized;
 
-            Vector2 dir = _agent.desiredVelocity;
-            if (dir.x < 0)
-                LookLeft = true;
-            else if (dir.x > 0)
-                LookLeft = false;
+            SetRigidbodyVelocity(dest * MoveSpeed);
         }
         else
-        {
-            _agent.isStopped = true;
-        }
+            SetRigidbodyVelocity(Vector2.zero);
     }
 
     protected override void UpdateHit()

@@ -47,30 +47,6 @@ public class Hero : Creature
         Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
-        {
-            KunaiSkill skill = gameObject.GetOrAddComponent<KunaiSkill>();
-            skill.SetInfo(this, Define.SKILL_KUNAI_ID);
-            _skills.Add(skill);
-        }
-
-        //{
-        //    RocketSkill skill = gameObject.GetOrAddComponent<RocketSkill>();
-        //    skill.SetInfo(this, Define.SKILL_ROCKET_ID);
-        //    _skills.Add(skill);
-        //}
-
-        //{
-        //    SatelliteSkill skill = gameObject.GetOrAddComponent<SatelliteSkill>();
-        //    skill.SetInfo(this, Define.SKILL_SATELLITE_ID);
-        //    _skills.Add(skill);
-        //}
-
-        //{
-        //    KatanaSkill skill = gameObject.GetOrAddComponent<KatanaSkill>();
-        //    skill.SetInfo(this, Define.SKILL_KATANA_ID);
-        //    _skills.Add(skill);
-        //}
-
         return true;
     }
 
@@ -89,6 +65,9 @@ public class Hero : Creature
         ItemAcquireRange = hereData.ItemAcquireRange;
         ResistDisorder = hereData.ResistDisorder;
 
+        foreach (int skillID in hereData.SkillIdList)
+            AddSkill(skillID);
+
         Managers.Game.RefreshUI();
     }
 
@@ -97,7 +76,20 @@ public class Hero : Creature
         if (IsValid(this) == false)
             return;
 
-        transform.TranslateEx(_moveDir * Time.deltaTime * MoveSpeed);
+        SetRigidbodyVelocity(_moveDir * MoveSpeed);
+    }
+
+    public void AddSkill(int skillTemplateID = 0)
+    {
+        string className = Managers.Data.SkillDic[skillTemplateID].ClassName;
+
+        SkillBase skill = gameObject.AddComponent(Type.GetType(className)) as SkillBase;
+        if (skill == null)
+            return;
+
+        skill.SetInfo(this, skillTemplateID);
+
+        _skills.Add(skill);
     }
 
     private void HandleOnMoveDirChanged(Vector2 dir)
@@ -125,6 +117,28 @@ public class Hero : Creature
         }
     }
 
+    #region Battle
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
+    {
+        base.OnDamaged(attacker, skill);
+
+        Managers.Game.RefreshUI();
+    }
+
+    public override void OnDead(BaseObject attacker, SkillBase skill)
+    {
+        base.OnDead(attacker, skill);
+
+        SetRigidbodyVelocity(Vector2.zero);
+        Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
+        Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
+
+        foreach (SkillBase s in _skills)
+        {
+            Destroy(s);
+        }
+    }
+
     private void LevelUp()
     {
         if (Level >= Define.MAX_LEVEL)
@@ -140,23 +154,6 @@ public class Hero : Creature
         MoveSpeed = (heroLevelData.MoveSpeed / 100.0f) * Define.DEFAULT_SPEED;
         ItemAcquireRange = heroLevelData.ItemAcquireRange;
         ResistDisorder = heroLevelData.ResistDisorder;
-    }
-
-    #region Battle
-    public override void OnDamaged(BaseObject attacker, SkillBase skill)
-    {
-        base.OnDamaged(attacker, skill);
-
-        Managers.Game.RefreshUI();
-    }
-
-    public override void OnDead(BaseObject attacker, SkillBase skill)
-    {
-        base.OnDead(attacker, skill);
-
-        _moveDir = Vector2.zero;
-        Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
-        Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
     }
     #endregion
 }

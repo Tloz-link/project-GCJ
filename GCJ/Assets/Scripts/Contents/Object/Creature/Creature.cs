@@ -80,6 +80,16 @@ public class Creature : BaseObject
         Animator.SetInteger("state", (int)state);
     }
 
+    protected void SetRigidbodyVelocity(Vector2 velocity)
+    {
+        RigidBody.velocity = velocity;
+
+        if (velocity.x < 0)
+            LookLeft = true;
+        else if (velocity.x > 0)
+            LookLeft = false;
+    }
+
     #region AI
     public float UpdateAITick { get; protected set; } = 0.0f;
 

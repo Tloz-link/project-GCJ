@@ -24,7 +24,7 @@ public class Projectile : BaseObject
         Renderer.sortingOrder = SortingLayers.PROJECTILE;
     }
 
-    public void SetSpawnInfo(Creature owner, SkillBase skill, Vector2 direction)
+    public virtual void SetSpawnInfo(Creature owner, SkillBase skill, Vector2 direction)
     {
         Owner = owner;
         Skill = skill;

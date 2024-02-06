@@ -22,16 +22,16 @@ public class SatelliteSkill : SkillBase
     private float durationTick = 0.0f;
     protected override void Update()
     {
+        RotateSatellites();
+
         if (isTimeActive)
         {
-            RotateSatellites();
-
             durationTick += Time.deltaTime;
             if (durationTick >= SkillData.Duration)
             {
                 ClearSatellites();
-                durationTick = 0.0f;
                 isTimeActive = false;
+                durationTick = 0.0f;
             }
         }
 
@@ -46,9 +46,9 @@ public class SatelliteSkill : SkillBase
     {
         ClearSatellites();
 
-        for (int i = 0; i < SkillData.NumProjectiles; ++i)
+        for (int i = 0; i < SkillData.AtkCount; ++i)
         {
-            float angle = i * 360f / SkillData.NumProjectiles;
+            float angle = i * 360f / SkillData.AtkCount;
             Vector2 spawnPosition = GetCirclePosition(angle, orbitRadius);
 
             Bird bird = Managers.Object.Spawn<Bird>(spawnPosition, SkillData.ProjectileId, transform);
@@ -80,10 +80,13 @@ public class SatelliteSkill : SkillBase
 
     private void ClearSatellites()
     {
-        for (int i = 0; i < birds.Count; ++i)
+        foreach (Bird bird in birds)
         {
-            Managers.Object.Despawn(birds[i]);
+            bird.Clear(() =>
+            {
+                Managers.Object.Despawn(bird);
+                birds.Remove(bird);
+            });
         }
-        birds.Clear();
     }
 }
