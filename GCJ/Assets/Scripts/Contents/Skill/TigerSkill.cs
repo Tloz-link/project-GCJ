@@ -42,4 +42,9 @@ public class TigerSkill : SkillBase
         Tiger tiger = Managers.Object.Spawn<Tiger>(Owner.transform.position + new Vector3(offsetX, offsetY, 0f), SkillData.ProjectileId);
         tiger.SetSpawnInfo(Owner, this, direction);
     }
+
+    public override void Clear()
+    {
+
+    }
 }

@@ -22,6 +22,14 @@ public abstract class SkillBase : InitBase
         _cooldownTick = SkillData.CoolTime;
     }
 
+    public void LevelUp()
+    {
+        SkillData = Managers.Data.SkillDic[SkillData.DataId + 1];
+
+        Clear();
+        _cooldownTick = SkillData.CoolTime;
+    }
+
     protected float _cooldownTick = 0f;
     protected virtual void Update()
     {
@@ -37,4 +45,5 @@ public abstract class SkillBase : InitBase
     }
 
     public abstract void DoSkill();
+    public abstract void Clear();
 }

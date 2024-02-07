@@ -89,4 +89,11 @@ public class SatelliteSkill : SkillBase
             });
         }
     }
+
+    public override void Clear()
+    {
+        ClearSatellites();
+        isTimeActive = false;
+        durationTick = 0.0f;
+    }
 }

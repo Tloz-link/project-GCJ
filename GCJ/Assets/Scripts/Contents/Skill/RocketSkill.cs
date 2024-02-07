@@ -35,4 +35,9 @@ public class RocketSkill : SkillBase
         Rocket proj = Managers.Object.Spawn<Rocket>(Owner.transform.position, SkillData.ProjectileId);
         proj.SetSpawnInfo(Owner, this, Util.RotateVectorByAngle(Owner.Direction, angle));
     }
+
+    public override void Clear()
+    {
+
+    }
 }

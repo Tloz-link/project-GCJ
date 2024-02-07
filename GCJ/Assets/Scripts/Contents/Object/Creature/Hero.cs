@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
+using static Unity.Collections.AllocatorManager;
 
 public class Hero : Creature
 {
@@ -165,6 +166,26 @@ public class Hero : Creature
         MoveSpeed = (heroLevelData.MoveSpeed / 100.0f) * Define.DEFAULT_SPEED;
         ItemAcquireRange = heroLevelData.ItemAcquireRange;
         ResistDisorder = heroLevelData.ResistDisorder;
+
+        List<int> spawnList = new List<int>();
+        List<SkillBase> skillList = new List<SkillBase>();
+
+        for (int i = 0; i < _skills.Count; ++i)
+        {
+            if (_skills[i].SkillData.Level >= 5)
+                continue;
+            spawnList.Add(i);
+        }
+
+        for (int i = 0; i < 3; ++i)
+        {
+            int rand = UnityEngine.Random.Range(0, spawnList.Count);
+
+            skillList.Add(_skills[spawnList[rand]]);
+            spawnList.RemoveAt(rand);
+        }
+
+        Managers.UI.ShowPopupUI<UI_LevelUp>().SetInfo(skillList);
     }
     #endregion
 }

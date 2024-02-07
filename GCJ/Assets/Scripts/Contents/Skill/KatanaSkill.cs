@@ -61,4 +61,9 @@ public class KatanaSkill : SkillBase
             monster.OnDamaged(Owner, this);
         }
     }
+
+    public override void Clear()
+    {
+
+    }
 }

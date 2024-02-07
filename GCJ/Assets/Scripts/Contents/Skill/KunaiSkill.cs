@@ -50,4 +50,9 @@ public class KunaiSkill : SkillBase
         Kunai proj = Managers.Object.Spawn<Kunai>(Owner.transform.position, SkillData.ProjectileId);
         proj.SetSpawnInfo(Owner, this, Util.RotateVectorByAngle(direction, angle));
     }
+
+    public override void Clear()
+    {
+
+    }
 }
