@@ -6,7 +6,10 @@
       "ItemAcquireRange": 0.0,
       "SkillIdList": [
         2011,
-        1021
+        1010,
+        2020,
+        1020,
+        1030
       ],
       "DataId": 100,
       "DescriptionTextID": "사육사",

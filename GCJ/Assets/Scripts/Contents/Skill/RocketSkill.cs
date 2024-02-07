@@ -19,7 +19,20 @@ public class RocketSkill : SkillBase
 
     public override void DoSkill()
     {
-        Rocket rocket = Managers.Object.Spawn<Rocket>(Owner.transform.position, SkillData.ProjectileId);
-        rocket.SetSpawnInfo(Owner, this, Owner.Direction);
+        AttackRocket(0);
+
+        for (int i = 2; i <= SkillData.AtkCount; ++i)
+        {
+            float angle = (i / 2) * SkillData.AtkAngle;
+            if (i % 2 == 1)
+                angle *= -1;
+            AttackRocket(angle);
+        }
+    }
+
+    private void AttackRocket(float angle)
+    {
+        Rocket proj = Managers.Object.Spawn<Rocket>(Owner.transform.position, SkillData.ProjectileId);
+        proj.SetSpawnInfo(Owner, this, Util.RotateVectorByAngle(Owner.Direction, angle));
     }
 }

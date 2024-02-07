@@ -36,7 +36,7 @@ public class Projectile : BaseObject
     private float tick = 0f;
     void Update()
     {
-        transform.Translate(Vector2.up * ProjectileData.ProjSpeed * Time.deltaTime);
+        transform.Translate(Vector2.up * 5 * Time.deltaTime);
 
         tick += Time.deltaTime;
         if (tick > 5f)

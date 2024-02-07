@@ -15,6 +15,13 @@ public class Util
         return new Vector2(Mathf.Cos(radianAngle), Mathf.Sin(radianAngle));
     }
 
+    public static Vector2 RotateVectorByAngle(Vector2 vector, float angle)
+    {
+        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+        Vector2 rotatedVector = rotation * vector;
+        return rotatedVector;
+    }
+
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();

@@ -22,7 +22,7 @@ public class KunaiSkill : SkillBase
     {
         Vector2 direction = Vector2.zero;
         
-        Monster target = Managers.Object.FindClosestMonster(transform.position, 5); // TODO 데이터 시트에서 뽑기
+        Monster target = Managers.Object.FindClosestMonster(transform.position, 5);
         if (target == null)
         {
             float randomAngle = Random.Range(0f, 360f);
@@ -34,7 +34,20 @@ public class KunaiSkill : SkillBase
             direction = target.transform.position - transform.position;
         }
 
+        AttackKunai(direction, 0);
+
+        for (int i = 2; i <= SkillData.AtkCount; ++i)
+        {
+            float angle = (i / 2) * SkillData.AtkAngle;
+            if (i % 2 == 1)
+                angle *= -1;
+            AttackKunai(direction, angle);
+        }
+    }
+
+    private void AttackKunai(Vector2 direction, float angle)
+    {
         Kunai proj = Managers.Object.Spawn<Kunai>(Owner.transform.position, SkillData.ProjectileId);
-        proj.SetSpawnInfo(Owner, this, direction);
+        proj.SetSpawnInfo(Owner, this, Util.RotateVectorByAngle(direction, angle));
     }
 }

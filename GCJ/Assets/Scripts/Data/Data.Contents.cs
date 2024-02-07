@@ -132,7 +132,8 @@ namespace Data
         public int DataId;
         public string Name;
         public string ClassName;
-        public float ProjSpeed;
+        public int Disorder;
+        public float DisorderDuration;
     }
 
     [Serializable]

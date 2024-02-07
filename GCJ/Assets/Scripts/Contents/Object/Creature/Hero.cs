@@ -35,6 +35,9 @@ public class Hero : Creature
     }
     #endregion
 
+    public Transform Pivot { get; private set; }
+    public Transform Destination { get; private set; }
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -46,6 +49,9 @@ public class Hero : Creature
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
+
+        Pivot = Util.FindChild<Transform>(gameObject, "Pivot", true);
+        Destination = Util.FindChild<Transform>(gameObject, "Destination", true);
 
         return true;
     }
@@ -97,7 +103,12 @@ public class Hero : Creature
         _moveDir = dir;
 
         if (dir != Vector2.zero)
+        {
             Direction = dir;
+
+            float angle = Mathf.Atan2(-dir.x, +dir.y) * 180 / Mathf.PI;
+            Pivot.eulerAngles = new Vector3(0, 0, angle);
+        }
     }
 
     private void HandleOnJoystickStateChanged(EJoystickState joystickState)

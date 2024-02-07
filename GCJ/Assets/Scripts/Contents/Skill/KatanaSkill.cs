@@ -19,11 +19,22 @@ public class KatanaSkill : SkillBase
 
     public override void DoSkill()
     {
-        Hero hero = Managers.Object.Hero;
-        Area katana = Managers.Resource.Instantiate("Area/Quarter", transform).GetOrAddComponent<Area>();
-        katana.SetInfo(hero.transform.position, 0.2f);
+        Vector2 direction = Owner.Direction;
+        AttackKatana(direction);
 
-        float angle = Mathf.Atan2(hero.Direction.y, hero.Direction.x) * Mathf.Rad2Deg;
+        for (int i = 2; i <= SkillData.AtkCount; ++i)
+        {
+            direction = Util.RotateVectorByAngle(direction, SkillData.AtkAngle);
+            AttackKatana(direction);
+        }
+    }
+
+    private void AttackKatana(Vector2 direction)
+    {
+        Area katana = Managers.Resource.Instantiate("Area/Quarter", transform).GetOrAddComponent<Area>();
+        katana.SetInfo(Owner.transform.position, 0.2f);
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         katana.transform.rotation = Quaternion.AngleAxis(angle - 45f, Vector3.forward);
 
         CircleCollider2D circleCollider = katana.GetComponent<CircleCollider2D>();
@@ -33,7 +44,7 @@ public class KatanaSkill : SkillBase
         foreach (var hitCollider in hitColliders)
         {
             Vector2 directionToTarget = (hitCollider.transform.position - katana.transform.position).normalized;
-            float angleToTarget = Vector2.Angle(hero.Direction, directionToTarget);
+            float angleToTarget = Vector2.Angle(direction, directionToTarget);
 
             if (angleToTarget < 90 / 2)
             {
